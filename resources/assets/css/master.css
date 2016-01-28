@@ -1,0 +1,146 @@
+/*
+ * Text
+ */
+/* ----------------------------------------------------------------------------------------------------
+    Font Families
+   ---------------------------------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif; }
+
+p, ul, li, a {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif; }
+
+/* ----------------------------------------------------------------------------------------------------
+    Regular Sizing
+   ---------------------------------------------------------------------------------------------------- */
+body {
+  font-size: 100%; }
+
+body, caption, th, td, input, textarea, select, option, legend, fieldset, h1, h2, h3, h4, h5, h6 {
+  font-size-adjust: 0.5; }
+
+body, caption, th, td, input, textarea, select, option, legend, fieldset {
+  line-height: 26px;
+  font-size: 17px; }
+
+h1 {
+  line-height: 1.000;
+  font-size: 32px; }
+
+h2 {
+  line-height: 1.000;
+  font-size: 26px; }
+
+h3 {
+  line-height: 1.000;
+  font-size: 22px; }
+
+h4 {
+  line-height: 1.000;
+  font-size: 18px; }
+
+blockquote {
+  line-height: 1.000;
+  font-size: 20px; }
+
+/* ----------------------------------------------------------------------------------------------------
+    Colours
+   ---------------------------------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6, body, p {
+  color: #333333; }
+
+/* ----------------------------------------------------------------------------------------------------
+    Links
+   ---------------------------------------------------------------------------------------------------- */
+a, a:hover, a:active, a:visited {
+  border-bottom: 1px solid #ff0000;
+  color: #333333;
+  text-decoration: none; }
+
+/* Basics */
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0; }
+  html img, body img {
+    max-width: 100%;
+    border: none; }
+
+/* Keeps footer at bottom of page */
+#wrapper {
+  position: relative;
+  min-height: 100%; }
+
+main {
+  padding-bottom: 100px;
+  /* Height of the footer element */ }
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100px;
+  width: 100%; }
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto; }
+
+header {
+  height: 80px;
+  border-bottom: 1px solid #f5f5f5;
+  background: #ffffff; }
+  header h2, header h3 {
+    position: absolute;
+    left: 35px;
+    display: inline-block;
+    width: 180px;
+    text-transform: uppercase; }
+    header h2 a, header h2 a:hover, header h3 a, header h3 a:hover {
+      border-bottom: none; }
+  header h2 {
+    top: 10px;
+    font-size: 17px; }
+  header h3 {
+    top: 35px;
+    text-indent: 5px;
+    font-size: 10px; }
+
+main {
+  box-sizing: border-box;
+  background: #224f60;
+  color: #ffffff;
+  text-align: center; }
+  main h1 {
+    padding-top: 30px;
+    color: inherit; }
+  main #game_canvas {
+    display: inline-block;
+    margin-top: 15px; }
+
+footer {
+  background: #ffffff;
+  text-align: center; }
+  footer ul {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 100%; }
+    footer ul li {
+      display: inline-block;
+      padding: 5px 10px;
+      font-size: 14px; }
+      footer ul li a:hover, footer ul li.active a {
+        border-bottom: 2px solid #ff0000; }
+  footer a, footer a:hover, footer a:active, footer a:visited {
+    border-bottom: 2px solid transparent; }
+  @media screen and (min-width: 520px) {
+    footer ul li:first-child {
+      display: inline-block; } }
+
+/*# sourceMappingURL=master.css.map */

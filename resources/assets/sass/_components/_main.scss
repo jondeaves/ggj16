@@ -1,0 +1,20 @@
+main {
+    box-sizing: border-box;
+    background: #224f60;
+    color: #ffffff;
+
+
+    text-align: center;
+
+
+    h1 {
+        padding-top: 30px;
+        color: inherit;
+    }
+
+    #game_canvas {
+        display: inline-block;
+        margin-top: 15px;
+    }
+
+}
