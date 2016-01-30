@@ -10,3 +10,7 @@ var impBaseThrust = 50;                         // Acceleration
 var impBaseDamping = 6;                   // Deceleration
 var impScaleLimits = [0.08, 0.12];             // Negative value will mess up collision box
 var turnToTargetOffset = 30;                   // Distance before removing turn to target
+
+var impStartHealth = 100;                   // This divided by impTTL defines how much health is lost per second
+var impTTL = 30;                              // How long imp lives for
+var impBumpDamage = 10;               // Amount of dmanage from collision
