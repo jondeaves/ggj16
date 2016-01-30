@@ -20,10 +20,10 @@ var clickLine = new Phaser.Line(0, 0, 0, 0);
 var songMountain;
 
 window.onload = function() {
-    game = new Phaser.Game(800, 480, Phaser.AUTO, 'game_canvas');
-    game.state.add("StartGame", startGame);
-    game.state.add("PlayGame", playGame);
-    game.state.start("PlayGame");
+  game = new Phaser.Game(800, 480, Phaser.AUTO, 'game_canvas');
+  game.state.add("StartGame", startGame);
+  game.state.add("PlayGame", playGame);
+  game.state.start("PlayGame");
 };
 
 
@@ -45,7 +45,9 @@ playGame.prototype = {
     game.load.image("background", "assets/bg/screenMockUp.png");
     game.load.audio('mountain', 'assets/audio/music/pImp-gasm.mp3');
 
-    game.load.spritesheet('imp', 'assets/sprites/imp2.png', 676, 764, 2);
+    game.load.spritesheet('imp1', 'assets/sprites/sprite_imp_1.png', 676, 764, 2);
+    game.load.spritesheet('imp2', 'assets/sprites/sprite_imp_2.png', 616, 669, 3);
+
     game.load.spritesheet('sheep', 'assets/sprites/sheep.png', 324, 473, 2);
     game.load.spritesheet('spider', 'assets/sprites/spider.png', 422, 490, 3);
   },
@@ -76,68 +78,35 @@ playGame.prototype = {
     impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
     impCollisionGroup = game.physics.p2.createCollisionGroup();
 
-    for (var i = 0; i < 2; i++)
+    for (var i = 0; i < 6; i++)
     {
-      var impScale = game.rnd.realInRange(impScaleLimits[0], impScaleLimits[1]);
-      var frames = game.cache.getFrameData('imp').getFrames();
-
-      imp = impGroup.create(game.world.randomX, game.world.randomY, 'imp');
-      imp.scale.setTo(impScale, impScale);
-      imp.body.setCircle((frames[0].width * impScale) / 2);
-      imp.body.damping = (impBaseDamping * impScale);
-      imp.id="imp"+i;
-
-
-      // Set-up Collisions
-      imp.body.setCollisionGroup(impCollisionGroup);
-      imp.body.collideWorldBounds = false;
-      imp.body.collides([impCollisionGroup]);
-      imp.body.onBeginContact.add(objectCollision, this);
-
-
-      // Animate
-      imp.animations.add('walk');
-      imp.animations.play('walk', 10, true);
-
+      var imp = new Imp(game, impGroup, impCollisionGroup, i);
+      game.add.existing(imp);
+      impGroup.add(imp);
     }
 
-        setupLevel();
-    },
-    update: function(){
-        updateImps();
-        updateTimer();
+    setupLevel();
+  },
+  update: function(){
+    updateTimer();
 
-        // drawClickLine();
-        // if (game.input.mousePointer.isDown){
-        if (clickLine.x !== 0){
+    // drawClickLine();
+    // if (game.input.mousePointer.isDown){
+    if (clickLine.x !== 0){
 
-          updateClickLine(clickNearestImp.x, clickNearestImp.y, game.input.x, game.input.y );
-          // console.log('hey');
-          // clickNearestImp = getNearest(impGroup, game.input );
-          // debugger;
-          // debugger;
-          // console.log(nearest.id);
-        }
-    },
-    render: function() {
-      game.debug.geom(clickLine, '#ff0000');
-      game.debug.lineInfo(clickLine, 32, 32);
+      updateClickLine(clickNearestImp.x, clickNearestImp.y, game.input.x, game.input.y );
+      // console.log('hey');
+      // clickNearestImp = getNearest(impGroup, game.input );
+      // debugger;
+      // debugger;
+      // console.log(nearest.id);
     }
+  },
+  render: function() {
+    game.debug.geom(clickLine, '#ff0000');
+    game.debug.lineInfo(clickLine, 32, 32);
+  }
 };
-
-
-function updateImps() {
-  impGroup.forEach(function(imp) {
-    imp.body.thrust(impBaseThrust);
-
-    // Bring back into the world if imp has escaped
-    var isOutside = (imp.x+imp.width < 0) || (imp.y+imp.height < 0) ||  (imp.x > game.width) || (imp.y > game.height);
-    if(isOutside) {
-      var targetAngle = this.game.math.angleBetween(imp.x, imp.y, game.width / 2, game.height / 2);
-      imp.body.rotation = (180/Math.PI) * targetAngle;
-    }
-  }, this);
-}
 
 
 function updateTimer() {
@@ -187,6 +156,7 @@ function getNearest(arrIn, pointIn){
   var nearest = null;
   var currentNearestDistance = 10000000000000;
   var dist;
+  console.log(arrIn.length);
   arrIn.forEach(function(obj){
     dist = getDistance(pointIn, obj.position);
     if (dist < currentNearestDistance){
@@ -243,4 +213,4 @@ spider = game.add.sprite(460, 200, 'spider');
 spider.animations.add('walk');
 spider.animations.play('walk', 4, true);
 spider.scale.setTo(0.15, 0.15);
- */
+*/
