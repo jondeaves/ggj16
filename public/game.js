@@ -11,12 +11,16 @@ var elapsedTime = 0;
 var previousElapsedTime = 0;
 var timeSinceLastTick = 0;            // Difference between elapsed and previous elapsed
 
+var clickPoint = null;
+var clickRelease = null;
+var clickNearestImp = null;
+var clickLine = new Phaser.Line(0, 0, 0, 0);
 
 window.onload = function() {
-  game = new Phaser.Game(800, 480, Phaser.AUTO, 'game_canvas');
-  game.state.add("StartGame", startGame);
-  game.state.add("PlayGame", playGame);
-  game.state.start("PlayGame");
+    game = new Phaser.Game(800, 480, Phaser.AUTO, 'game_canvas');
+    game.state.add("StartGame", startGame);
+    game.state.add("PlayGame", playGame);
+    game.state.start("PlayGame");
 };
 
 
@@ -72,20 +76,28 @@ playGame.prototype = {
 
     }
 
+        setupLevel();
+    },
+    update: function(){
+        updateImps();
+        updateTimer();
 
-  },
-  update: function(){
-    updateImps();
-    updateTimer();
+        // drawClickLine();
+        // if (game.input.mousePointer.isDown){
+        if (clickLine.x !== 0){
 
-
-
-    if (game.input.mousePointer.isDown){
-      var nearest = getNearest(impGroup, game.input );
-      console.log(nearest.id);
+          updateClickLine(clickNearestImp.x, clickNearestImp.y, game.input.x, game.input.y );
+          // console.log('hey');
+          // clickNearestImp = getNearest(impGroup, game.input );
+          // debugger;
+          // debugger;
+          // console.log(nearest.id);
+        }
+    },
+    render: function() {
+      game.debug.geom(clickLine, '#ff0000');
+      game.debug.lineInfo(clickLine, 32, 32);
     }
-
-  }
 };
 
 
@@ -136,6 +148,7 @@ function objectCollision (body, bodyB, shapeA, shapeB, equation) {
     result = 'You last hit: The wall :)';
   }
 
+
 }
 
 
@@ -159,4 +172,28 @@ function getNearest(arrIn, pointIn){
     // console.log(obj.position.x);
   });
   return nearest || null;
+}
+
+function setupLevel(){
+
+  game.input.mouse.onMouseDown = function (e){
+
+    clickNearestImp = getNearest(impGroup, game.input );
+    clickPoint = {x:e.x, y:e.y};
+
+    updateClickLine(clickNearestImp.x, clickNearestImp.y, clickPoint.x, clickPoint.y );
+
+  };
+  game.input.mouse.onMouseUp = function (e){
+
+    updateClickLine(0, 0, 0, 0 );
+
+  };
+}
+
+function updateClickLine(x1, y1, x2, y2){
+  clickLine.start.x = x1;
+  clickLine.start.y = y1;
+  clickLine.end.x =  x2;
+  clickLine.end.y =y2;
 }
