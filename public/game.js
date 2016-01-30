@@ -59,6 +59,7 @@ playGame.prototype = {
                 imp.body.setCircle((imp.width * impScale) / 2);
                 imp.body.damping = impBaseDamping;      // Deceleration
                 imp.scale.setTo(impScale, impScale);
+                imp.id="imp"+i;
 
                 // Track collisions with anything
                 imp.body.onBeginContact.add(objectCollision, this);
@@ -69,6 +70,15 @@ playGame.prototype = {
     update: function(){
         updateImps();
         updateTimer();
+
+
+
+      if (game.input.mousePointer.isDown){
+        var nearest = getNearest(impGroup, game.input );
+        console.log(nearest.id);
+      }
+
+
     }
 };
 
@@ -115,4 +125,27 @@ function objectCollision (body, bodyB, shapeA, shapeB, equation) {
     }
     console.log(result);
 
+}
+
+
+
+function getDistance(pointA, pointB){
+  return Math.sqrt( Math.pow((pointA.x-pointB.x), 2) + Math.pow((pointA.y-pointB.y), 2) );
+}
+
+
+function getNearest(arrIn, pointIn){
+  var nearest = null;
+  var currentNearestDistance = 10000000000000;
+  var dist;
+  arrIn.forEach(function(obj){
+    dist = getDistance(pointIn, obj.position);
+    if (dist < currentNearestDistance){
+      currentNearestDistance = dist;
+      nearest = obj;
+    }
+    // console.log(getDistance(pointIn, obj.position));
+    // console.log(obj.position.x);
+  });
+  return nearest || null;
 }
