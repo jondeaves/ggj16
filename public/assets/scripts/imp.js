@@ -1,5 +1,6 @@
 var Imp = function (game, objectGroup, collisionGroup, index) {
 
+
     var impScale = game.rnd.realInRange(impScaleLimits[0], impScaleLimits[1]);
     var impRotation = game.rnd.integerInRange(0, 360);
     var impSprite = game.rnd.integerInRange(1, 2);
@@ -33,14 +34,31 @@ var Imp = function (game, objectGroup, collisionGroup, index) {
 };
 Imp.prototype = Object.create(Phaser.Sprite.prototype);
 Imp.prototype.constructor = Imp;
+Imp.prototype.turnToTarget = null;
 Imp.prototype.update = function() {
 
-  this.body.thrust(impBaseThrust);
-
   // Bring back into the world if this has escaped
+  var turnToTargetLocal = this.turnToTarget;
   var isOutside = (this.x+this.width < 0) || (this.y+this.height < 0) ||  (this.x > game.width) || (this.y > game.height);
   if(isOutside) {
-    var targetAngle = this.game.math.angleBetween(this.x, this.y, game.width / 2, game.height / 2);
-    this.body.rotation = (180/Math.PI) * targetAngle;
+    turnToTargetLocal = { x: game.width / 2, y: game.height / 2};
+    console.log(turnToTargetLocal);
+  }
+
+
+  // Got somewhere to go? Or are you just driftwood?
+  if(this.turnToTarget !== null) {
+    // console.log(this.turnToTarget);
+    accelerateToObject(this, turnToTargetLocal, impBaseThrust);
+    var distance = getDistance(this, turnToTargetLocal);
+    if(distance < turnToTargetOffset) {
+      this.turnToTarget = null;
+    }
+
+    // var targetAngle = this.game.math.angleBetween(this.x, this.y, turnToTargetLocal.x, turnToTargetLocal.y);
+    // console.log(targetAngle * (180/Math.PI));
+    // this.body.rotation = (180/Math.PI) * targetAngle;
+  } else {
+      this.body.thrust(impBaseThrust);
   }
 };

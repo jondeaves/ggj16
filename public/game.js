@@ -78,7 +78,7 @@ playGame.prototype = {
     impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
     impCollisionGroup = game.physics.p2.createCollisionGroup();
 
-    for (var i = 0; i < 6; i++)
+    for (var i = 0; i < 1; i++)
     {
       var imp = new Imp(game, impGroup, impCollisionGroup, i);
       game.add.existing(imp);
@@ -175,6 +175,8 @@ function setupLevel(){
 
     clickNearestImp = getNearest(impGroup, game.input );
     clickPoint = {x:e.x, y:e.y};
+    clickNearestImp.turnToTarget = clickPoint;
+
 
     updateClickLine(clickNearestImp.x, clickNearestImp.y, clickPoint.x, clickPoint.y );
 
@@ -194,6 +196,16 @@ function updateClickLine(x1, y1, x2, y2){
 }
 
 
+
+
+function accelerateToObject(obj1, obj2, speed) {
+    if (typeof speed === 'undefined') { speed = 60; }
+    // var angle = game.math.angleBetween(obj1.x, obj1.y, obj2.x, obj2.y);
+    var angle = Math.atan2(obj2.y - obj1.y, obj2.x - obj1.x);
+    obj1.body.rotation = angle + game.math.degToRad(90);  // correct angle of angry bullets (depends on the sprite used)
+    obj1.body.force.x = Math.cos(angle) * speed;    // accelerateToObject
+    obj1.body.force.y = Math.sin(angle) * speed;
+}
 
 
 
