@@ -16,6 +16,9 @@ var clickRelease = null;
 var clickNearestImp = null;
 var clickLine = new Phaser.Line(0, 0, 0, 0);
 
+// audio
+var songMountain;
+
 window.onload = function() {
     game = new Phaser.Game(800, 480, Phaser.AUTO, 'game_canvas');
     game.state.add("StartGame", startGame);
@@ -40,6 +43,7 @@ startGame.prototype = {
 playGame.prototype = {
   preload: function() {
     game.load.image("imp", "assets/sprites/parrot2.png");
+    game.load.audio('mountain', 'assets/audio/music/pImp-gasm.mp3');
   },
   create: function(){
 
@@ -47,6 +51,9 @@ playGame.prototype = {
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.setImpactEvents(true);
     game.physics.p2.restitution = physicsBaseRestitution;
+
+    songMountain = game.add.audio('mountain');
+    songMountain.play();
 
 
     // Init Input
