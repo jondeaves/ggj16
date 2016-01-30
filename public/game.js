@@ -21,6 +21,16 @@ var bgImage;
 
 // audio
 var songMountain;
+var nuuuu;
+var i_made_it;
+var impaled;
+var impossible;
+var impressive;
+var impudent;
+var whoohoo;
+var whoop;
+var yes;
+
 
 window.onload = function() {
   game = new Phaser.Game(800, 480, Phaser.AUTO, 'game_canvas');
@@ -47,6 +57,15 @@ playGame.prototype = {
   preload: function() {
     //  audio
     game.load.audio('mountain', 'assets/audio/music/pImp-gasm.mp3');
+    game.load.audio('nuuuu', 'assets/audio/vox/nuuuu.mp3');
+    game.load.audio('i_made_it', 'assets/audio/vox/i_made_it.mp3');
+    game.load.audio('impaled', 'assets/audio/vox/impaled.mp3');
+    game.load.audio('impossible', 'assets/audio/vox/impossible.mp3');
+    game.load.audio('impressive', 'assets/audio/vox/impressive.mp3');
+    game.load.audio('impudent', 'assets/audio/vox/impudent.mp3');
+    game.load.audio('whoohoo', 'assets/audio/vox/whoohoo.mp3');
+    game.load.audio('whoop', 'assets/audio/vox/whoop.mp3');
+    game.load.audio('yes', 'assets/audio/vox/yes.mp3');
 
     // images
     game.load.image("background", "assets/bg/screenMockUp.png");
@@ -91,8 +110,16 @@ playGame.prototype = {
 
     // Sounds good
     songMountain = game.add.audio('mountain');
-    // songMountain.play();
-
+    nuuuu = game.add.audio('nuuuu');
+    i_made_it = game.add.audio('i_made_it');
+    impaled = game.add.audio('impaled');
+    impossible = game.add.audio('impossible');
+    impressive = game.add.audio('impressive');
+    impudent = game.add.audio('impudent');
+    whoohoo = game.add.audio('whoohoo');
+    yes = game.add.audio('yes');
+    whoop = game.add.audio('whoop');
+    songMountain.play();
 
     // Init Input
     cursors = game.input.keyboard.createCursorKeys();
@@ -203,6 +230,7 @@ function setupLevel(){
     updateClickLine(0, 0, 0, 0 );
     clickNearestImp.turnToTarget = e;
     clickCircle.setTo(e.x, e.y, 2);
+    yes.play();
   };
 }
 
