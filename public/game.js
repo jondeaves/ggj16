@@ -30,6 +30,13 @@ var impudent;
 var whoohoo;
 var whoop;
 var yes;
+var bump1;
+var bump2;
+var bump3;
+var bump4;
+var impWin;
+var impWin2;
+var player;
 
 
 window.onload = function() {
@@ -66,6 +73,13 @@ playGame.prototype = {
     game.load.audio('whoohoo', 'assets/audio/vox/whoohoo.mp3');
     game.load.audio('whoop', 'assets/audio/vox/whoop.mp3');
     game.load.audio('yes', 'assets/audio/vox/yes.mp3');
+    game.load.audio('bump1', 'assets/audio/sfx/bump1.mp3');
+    game.load.audio('bump2', 'assets/audio/sfx/bump2.mp3');
+    game.load.audio('bump3', 'assets/audio/sfx/bump3.mp3');
+    game.load.audio('bump4', 'assets/audio/sfx/bump4.mp3');
+    game.load.audio('impWin', 'assets/audio/sfx/impWin.mp3');
+    game.load.audio('impWin2', 'assets/audio/sfx/impWin2.mp3');
+
 
     // images
     game.load.image("background", "assets/bg/screenMockUp.png");
@@ -109,6 +123,7 @@ playGame.prototype = {
 
 
     // Sounds good
+
     songMountain = game.add.audio('mountain');
     nuuuu = game.add.audio('nuuuu');
     i_made_it = game.add.audio('i_made_it');
@@ -119,6 +134,13 @@ playGame.prototype = {
     whoohoo = game.add.audio('whoohoo');
     yes = game.add.audio('yes');
     whoop = game.add.audio('whoop');
+    bump1 = game.add.audio('bump1');
+    bump2 = game.add.audio('bump2');
+    bump3 = game.add.audio('bump3');
+    bump4 = game.add.audio('bump4');
+    impWin = game.add.audio('impWin');
+    impWin2 = game.add.audio('impWin2');
+
     songMountain.play();
 
     // Init Input
@@ -188,6 +210,8 @@ function objectCollision (body, bodyB, shapeA, shapeB, equation) {
   else {
     result = 'You last hit: The wall :)';
   }
+  playBump(); // boiiing
+  playOuch(); // sometimes says ouch
 
 
 }
@@ -263,7 +287,29 @@ function handleClickCircle(){
 }
 
 
+function playBump(point){
+  var result = Math.floor((Math.random() * 4) + 1);
+  if (result ===1){
+    bump1.play();
+  } else if (result ===2){
+    bump2.play();
+  } else if (result ===3){
+    bump3.play();
+  } else if (result = 4){
+    bump4.play();
+  }
+}
 
+function playOuch(point, gender){
+  var result = Math.floor((Math.random() * 6) + 1);
+  if (result ===1){
+    impudent.play();
+  } else if (result ===2){
+    nuuuu.play();
+  } else if (result ===3){
+    whoop.play();
+  }
+}
 
 /*
 imp = game.add.sprite(60, 200, 'imp');
