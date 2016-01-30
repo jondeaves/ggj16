@@ -15,8 +15,9 @@ var clickPoint = null;
 var clickRelease = null;
 var clickNearestImp = null;
 var clickLine = new Phaser.Line(0, 0, 0, 0);
-var clickCircle = new Phaser.Circle(300, 100,64);
+var clickCircle = new Phaser.Circle(0, 0,0);
 var filter;
+var bgImage;
 
 // audio
 var songMountain;
@@ -62,21 +63,24 @@ playGame.prototype = {
   create: function(){
 
     // Pretty
-    var bgImage = game.add.image(0, 0, "background");
-    bgImage.width = 800;
-    bgImage.height = 480;
-    var bgImage2 = game.add.image(0, 0, "background");
+    var bgFlames = game.add.image(0, 0, "background");
+    bgFlames.width = 800;
+    bgFlames.height = 480;
+    bgImage = game.add.image(0, 0, "background");
     bgImage.width = 800;
     bgImage.height = 480;
 
     filter = game.add.filter('Fire', 800, 600);
-    filter.alpha = 0.5;
+    filter.alpha = 0.0001;
+
+    bgFlames.alpha = 0.1;
+
 
     // slowly reduce this value as the game gets closer to completion
-    bgImage2.alpha = 0.8;
+    bgImage.alpha = 0.99;
     // bgImage2.opacity = 0.5;
 
-    bgImage.filters = [filter];
+    bgFlames.filters = [filter];
 
 
     // Init Physics system
@@ -98,7 +102,7 @@ playGame.prototype = {
     impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
     impCollisionGroup = game.physics.p2.createCollisionGroup();
 
-    for (var i = 0; i < 1; i++)
+    for (var i = 0; i < 10; i++)
     {
       var imp = new Imp(game, impGroup, impCollisionGroup, i);
       game.add.existing(imp);
@@ -109,9 +113,9 @@ playGame.prototype = {
   },
   update: function(){
     updateTimer();
+    bgImage.alpha -= 0.001;
 
-    // drawClickLine();
-
+    handleClickCircle();
     filter.update();
     if (clickLine.x !== 0){
       updateClickLine(clickNearestImp.x, clickNearestImp.y, game.input.x, game.input.y );
@@ -121,7 +125,6 @@ playGame.prototype = {
     game.debug.geom(clickLine, '#ff0000');
     game.debug.lineInfo(clickLine, 32, 32);
     game.debug.geom(clickCircle,'#cfffff', false);
-
   }
 };
 
@@ -192,16 +195,14 @@ function setupLevel(){
 
     clickNearestImp = getNearest(impGroup, game.input );
     clickPoint = {x:e.x, y:e.y};
-    clickNearestImp.turnToTarget = clickPoint;
-
-
     updateClickLine(clickNearestImp.x, clickNearestImp.y, clickPoint.x, clickPoint.y );
 
   };
   game.input.mouse.onMouseUp = function (e){
-
+    // debugger;
     updateClickLine(0, 0, 0, 0 );
-
+    clickNearestImp.turnToTarget = e;
+    clickCircle.setTo(e.x, e.y, 2);
   };
 }
 
@@ -222,6 +223,15 @@ function accelerateToObject(obj1, obj2, speed) {
     obj1.body.rotation = angle + game.math.degToRad(90);  // correct angle of angry bullets (depends on the sprite used)
     obj1.body.force.x = Math.cos(angle) * speed;    // accelerateToObject
     obj1.body.force.y = Math.sin(angle) * speed;
+}
+
+
+function handleClickCircle(){
+  if (clickCircle.radius >= 35){
+    clickCircle.setTo(0, 0, 0);
+  } else if (clickCircle.radius > 0){
+    clickCircle.radius += 2;
+  }
 }
 
 

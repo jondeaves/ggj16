@@ -14,10 +14,12 @@ var Imp = function (game, objectGroup, collisionGroup, index) {
 
     // Setup Object
     this.scale.setTo(impScale, impScale);
-    this.body.setCircle((frames[0].width * impScale) / 2);
+    this.body.setCircle((frames[0].width * impScale) / 3.3);
     this.body.damping = (impBaseDamping * impScale);
     this.body.rotation = (180/Math.PI) * impRotation;
     this.id='imp_'+index;
+    // setting anchor forwards creates a swinging effect on rotation
+    this.anchor.y = 0.33
 
 
     // Set-up Collisions
@@ -42,7 +44,7 @@ Imp.prototype.update = function() {
   var isOutside = (this.x+this.width < 0) || (this.y+this.height < 0) ||  (this.x > game.width) || (this.y > game.height);
   if(isOutside) {
     turnToTargetLocal = { x: game.width / 2, y: game.height / 2};
-    console.log(turnToTargetLocal);
+    // console.log(turnToTargetLocal);
   }
 
 
