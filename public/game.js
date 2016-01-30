@@ -15,6 +15,8 @@ var clickPoint = null;
 var clickRelease = null;
 var clickNearestImp = null;
 var clickLine = new Phaser.Line(0, 0, 0, 0);
+var clickCircle = new Phaser.Circle(300, 100,64);
+var filter;
 
 // audio
 var songMountain;
@@ -42,14 +44,20 @@ startGame.prototype = {
 
 playGame.prototype = {
   preload: function() {
-    game.load.image("background", "assets/bg/screenMockUp.png");
+    //  audio
     game.load.audio('mountain', 'assets/audio/music/pImp-gasm.mp3');
 
+    // images
+    game.load.image("background", "assets/bg/screenMockUp.png");
+
+    // spritesheets
     game.load.spritesheet('imp1', 'assets/sprites/sprite_imp_1.png', 676, 764, 2);
     game.load.spritesheet('imp2', 'assets/sprites/sprite_imp_2.png', 616, 669, 3);
-
     game.load.spritesheet('sheep', 'assets/sprites/sheep.png', 324, 473, 2);
     game.load.spritesheet('spider', 'assets/sprites/spider.png', 422, 490, 3);
+
+    // scripts
+    game.load.script('filter', 'assets/scripts/lib/Fire.js');
   },
   create: function(){
 
@@ -57,6 +65,18 @@ playGame.prototype = {
     var bgImage = game.add.image(0, 0, "background");
     bgImage.width = 800;
     bgImage.height = 480;
+    var bgImage2 = game.add.image(0, 0, "background");
+    bgImage.width = 800;
+    bgImage.height = 480;
+
+    filter = game.add.filter('Fire', 800, 600);
+    filter.alpha = 0.5;
+
+    // slowly reduce this value as the game gets closer to completion
+    bgImage2.alpha = 0.8;
+    // bgImage2.opacity = 0.5;
+
+    bgImage.filters = [filter];
 
 
     // Init Physics system
@@ -67,7 +87,7 @@ playGame.prototype = {
 
     // Sounds good
     songMountain = game.add.audio('mountain');
-    songMountain.play();
+    // songMountain.play();
 
 
     // Init Input
@@ -91,20 +111,17 @@ playGame.prototype = {
     updateTimer();
 
     // drawClickLine();
-    // if (game.input.mousePointer.isDown){
-    if (clickLine.x !== 0){
 
+    filter.update();
+    if (clickLine.x !== 0){
       updateClickLine(clickNearestImp.x, clickNearestImp.y, game.input.x, game.input.y );
-      // console.log('hey');
-      // clickNearestImp = getNearest(impGroup, game.input );
-      // debugger;
-      // debugger;
-      // console.log(nearest.id);
     }
   },
   render: function() {
     game.debug.geom(clickLine, '#ff0000');
     game.debug.lineInfo(clickLine, 32, 32);
+    game.debug.geom(clickCircle,'#cfffff', false);
+
   }
 };
 
