@@ -1,5 +1,5 @@
 // Physics
-var physicsBaseRestitution = 0.9;           // Bounce strength
+var physicsBaseRestitution = 9;           // Bounce strength
 
 
 // Imps
