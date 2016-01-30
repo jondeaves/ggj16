@@ -40,7 +40,7 @@ var player;
 
 
 window.onload = function() {
-  game = new Phaser.Game(800, 480, Phaser.AUTO, 'game_canvas');
+  game = new Phaser.Game(screenWidthX, screenWidthY, Phaser.AUTO, 'game_canvas');
   game.state.add("StartGame", startGame);
   game.state.add("PlayGame", playGame);
   game.state.start("PlayGame");
@@ -97,13 +97,13 @@ playGame.prototype = {
 
     // Pretty
     var bgFlames = game.add.image(0, 0, "background");
-    bgFlames.width = 800;
-    bgFlames.height = 480;
+    bgFlames.width = screenWidthX;
+    bgFlames.height = screenWidthY;
     bgImage = game.add.image(0, 0, "background");
-    bgImage.width = 800;
-    bgImage.height = 480;
+    bgImage.width = screenWidthX;
+    bgImage.height = screenWidthY;
 
-    filter = game.add.filter('Fire', 800, 600);
+    filter = game.add.filter('Fire', screenWidthX, screenWidthY);
     filter.alpha = 0.0001;
 
     bgFlames.alpha = 0.1;
@@ -141,7 +141,7 @@ playGame.prototype = {
     impWin = game.add.audio('impWin');
     impWin2 = game.add.audio('impWin2');
 
-    songMountain.play();
+    // songMountain.play();
 
     // Init Input
     cursors = game.input.keyboard.createCursorKeys();
@@ -151,8 +151,7 @@ playGame.prototype = {
     impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
     impCollisionGroup = game.physics.p2.createCollisionGroup();
 
-    for (var i = 0; i < 10; i++)
-    {
+    for (var i = 0; i < 10; i++){
       var imp = new Imp(game, impGroup, impCollisionGroup, i);
       game.add.existing(imp);
       impGroup.add(imp);
@@ -264,8 +263,6 @@ function updateClickLine(x1, y1, x2, y2){
   clickLine.end.x =  x2;
   clickLine.end.y =y2;
 }
-
-
 
 
 function accelerateToObject(obj1, obj2, speed) {
