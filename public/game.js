@@ -42,8 +42,8 @@ startGame.prototype = {
 
 playGame.prototype = {
   preload: function() {
-    game.load.image("imp", "assets/sprites/parrot2.png");
     game.load.audio('mountain', 'assets/audio/music/pImp-gasm.mp3');
+    game.load.spritesheet('imp', 'assets/sprites/imp2.png', 676, 764, 2);
   },
   create: function(){
 
@@ -64,15 +64,16 @@ playGame.prototype = {
     impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
     impCollisionGroup = game.physics.p2.createCollisionGroup();
 
-    for (var i = 0; i < 1; i++)
+    for (var i = 0; i < 20; i++)
     {
       var impScale = game.rnd.realInRange(impScaleLimits[0], impScaleLimits[1]);
 
       imp = impGroup.create(game.world.randomX, game.world.randomY, 'imp');
       imp.scale.setTo(impScale, impScale);
-      imp.body.setCircle((imp.width * impScale) / 2);
+      imp.body.setCircle((imp.frame.width * impScale) / 2);
       imp.body.damping = (impBaseDamping * impScale);
       imp.id="imp"+i;
+      console.log(imp.frame);
 
 
       // Set-up Collisions
@@ -80,6 +81,11 @@ playGame.prototype = {
       imp.body.collideWorldBounds = false;
       imp.body.collides([impCollisionGroup]);
       imp.body.onBeginContact.add(objectCollision, this);
+
+
+      // Animate
+      imp.animations.add('walk');
+      imp.animations.play('walk', 10, true);
 
     }
 
@@ -114,6 +120,7 @@ function updateImps() {
 
     // Bring back into the world if imp has escaped
     var isOutside = (imp.x+imp.width < 0) || (imp.y+imp.height < 0) ||  (imp.x > game.width) || (imp.y > game.height);
+    isOutside = true;
     if(isOutside) {
       var targetAngle = this.game.math.angleBetween(imp.x, imp.y, game.width / 2, game.height / 2);
       imp.body.rotation = (180/Math.PI) * targetAngle;
