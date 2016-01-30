@@ -60,7 +60,7 @@ playGame.prototype = {
       imp = impGroup.create(game.world.randomX, game.world.randomY, 'imp');
       imp.scale.setTo(impScale, impScale);
       imp.body.setCircle((imp.width * impScale) / 2);
-      imp.body.damping = impBaseDamping;
+      imp.body.damping = (impBaseDamping * impScale);
       imp.id="imp"+i;
 
 
