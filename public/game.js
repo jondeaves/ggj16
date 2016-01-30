@@ -212,10 +212,8 @@ function objectCollision (body, bodyB, shapeA, shapeB, equation) {
   //
   //  The first argument may be null or not have a sprite property, such as when you hit the world bounds.
   if (body) {
-    result = 'You last hit: ' + body.sprite.key;
-  }
-  else {
-    result = 'You last hit: The wall :)';
+    body.health -= impBumpDamage;
+    bodyB.health -= impBumpDamage;
   }
   playBump(); // boiiing
   playOuch(); // sometimes says ouch
@@ -234,7 +232,7 @@ function getNearest(arrIn, pointIn){
   var nearest = null;
   var currentNearestDistance = 10000000000000;
   var dist;
-  console.log(arrIn.length);
+  // console.log(arrIn.length);
   arrIn.forEach(function(obj){
     dist = getDistance(pointIn, obj.position);
     if (dist < currentNearestDistance){

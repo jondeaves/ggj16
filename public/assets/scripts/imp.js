@@ -18,6 +18,7 @@ var Imp = function (game, objectGroup, collisionGroup, index) {
     this.body.setCircle((frames[0].width * impScale) / 3.3);
     this.body.damping = (impBaseDamping * impScale);
     this.body.rotation = impSpawn.rotation;
+    this.body.health = impStartHealth;
     // this.body.rotation = (180/Math.PI) * impRotation;
     this.id='imp_'+index;
     // setting anchor forwards creates a swinging effect on rotation
@@ -35,6 +36,11 @@ var Imp = function (game, objectGroup, collisionGroup, index) {
     this.animations.add('walk');
     this.animations.play('walk', 10, true);
 
+
+    game.time.events.add(1000, function(){
+        updateImpHealth(this);
+    }, this);
+
 };
 Imp.prototype = Object.create(Phaser.Sprite.prototype);
 Imp.prototype.constructor = Imp;
@@ -50,7 +56,7 @@ Imp.prototype.update = function() {
     (this.y > game.height + worldBoundsOffset); // off to left
 
   if(isOutside) {
-    console.log('is outside');
+    // console.log('is outside');
     turnToTargetLocal = null;
     var point1 = new Phaser.Point(this.x, this.y);
     var point2 = new Phaser.Point(game.width / 2, game.height / 2);
@@ -71,6 +77,13 @@ Imp.prototype.update = function() {
 
   } else {
       this.body.thrust(impBaseThrust);
+  }
+
+
+  // Health check
+  if(this.body.health <= 0) {
+    impaled.play();
+    this.destroy();
   }
 
 };
@@ -105,4 +118,20 @@ function getSpawnLocation(){
 
     return theReturn;
 
+}
+
+
+function updateImpHealth(imp) {
+
+  if(imp.body !== null) {
+    var healthLossPerSecond = impStartHealth / impTTL;
+    imp.body.health -= healthLossPerSecond;
+
+    // Keep the loop going every second
+    if(imp.body.health > 0) {
+      game.time.events.add(1000, function(){
+        updateImpHealth(imp);
+      }, this);
+    }
+  }
 }
