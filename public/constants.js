@@ -1,6 +1,6 @@
 // World
 var physicsBaseRestitution = 3;           // Bounce strength
-var worldBoundsOffset = 100;            // An offset to stop imp return to centre until totally off screen
+var worldBoundsOffset = 50;            // An offset to stop imp return to centre until totally off screen
 var screenWidthX = 800;
 var screenWidthY = 480;
 

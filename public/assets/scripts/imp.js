@@ -44,13 +44,19 @@ Imp.prototype.update = function() {
   // Bring back into the world if this has escaped
   var turnToTargetLocal = this.turnToTarget;
   var isOutside =
-    (this.x+this.width < 0 - worldBoundsOffset) ||
-    (this.y+this.height < 0 - worldBoundsOffset) ||
-    (this.x > game.width + worldBoundsOffset) ||
-    (this.y > game.height + worldBoundsOffset);
+    (this.x+this.width < 0 - worldBoundsOffset) || // off to left
+    (this.y+this.height < 0 - worldBoundsOffset) || // off to top
+    (this.x > game.width + worldBoundsOffset) || // off to right
+    (this.y > game.height + worldBoundsOffset); // off to left
 
   if(isOutside) {
-    turnToTargetLocal = { x: game.width / 2, y: game.height / 2};
+    console.log('is outside');
+    turnToTargetLocal = null;
+    var point1 = new Phaser.Point(this.x, this.y);
+    var point2 = new Phaser.Point(game.width / 2, game.height / 2);
+    var targetAngle = point1.angle(point2) + game.math.degToRad(90);
+    this.body.rotation = targetAngle;
+    // turnToTargetLocal = { x: game.width / 2, y: game.height / 2};
   }
 
 
