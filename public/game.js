@@ -2,6 +2,18 @@
 var game;
 var carrot;
 
+
+
+// Track some timing stuff
+var gameTimer;
+
+var startTime = 0;
+var elapsedTime = 0;
+var previousElapsedTime = 0;
+var timeSinceLastTick = 0;            // Difference between elapsed and previous elapsed
+
+
+
 window.onload = function() {
     game = new Phaser.Game(800, 480, Phaser.AUTO, 'game_canvas');
     game.state.add("StartGame", startGame);
@@ -25,7 +37,7 @@ startGame.prototype = {
 
 playGame.prototype = {
     preload: function() {
-        game.load.image("parrot", "assets/sprites/parrot2.png");
+        game.load.image("imp", "assets/sprites/parrot2.png");
     },
     create: function(){
 
@@ -45,23 +57,40 @@ playGame.prototype = {
 
 
         // Create some objects, apply physics to entire Group
-        parrotGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
-        for (var i = 0; i < 1; i++)
+        impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
+        for (var i = 0; i < 6; i++)
         {
-                parrot = parrotGroup.create(game.world.randomX, game.world.randomY, 'parrot');
-                parrot.body.setCircle(32);
-                parrot.body.thrust(2000);
-                parrot.body.damping = 0.1;      // Deceleration
+                var impScale = game.rnd.realInRange(1, 1.7);
+
+                imp = impGroup.create(game.world.randomX, game.world.randomY, 'imp');
+                imp.body.setCircle((imp.width * impScale) / 2);
+                imp.body.thrust(2000);
+                imp.body.damping = 0.1;      // Deceleration
+
+
+                imp.scale.setTo(impScale, impScale);
 
                 // Track collisions with anything
-                parrot.body.onBeginContact.add(objectCollision, this);
+                imp.body.onBeginContact.add(objectCollision, this);
         }
 
 
     },
     update: function(){
+        updateTimer();
     }
 };
+
+
+function updateTimer() {
+    // Time Tracking
+    elapsedTime = game.time.time - startTime;
+    if(previousElapsedTime === 0) {
+        previousElapsedTime = elapsedTime;
+    }
+    timeSinceLastTick = elapsedTime - previousElapsedTime;
+    previousElapsedTime = elapsedTime;                                          // We are finished previous time at time point
+}
 
 
 
