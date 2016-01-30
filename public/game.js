@@ -92,6 +92,7 @@ playGame.prototype = {
 
     // scripts
     game.load.script('filter', 'assets/scripts/lib/Fire.js');
+    game.load.script('gray', 'assets/scripts/lib/Gray.js');
   },
   create: function(){
 

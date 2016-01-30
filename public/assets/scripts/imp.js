@@ -14,6 +14,7 @@ var Imp = function (game, objectGroup, collisionGroup, index) {
     objectGroup.add(this);
 
     // Setup Object
+    this.deathSpinSpeed = impDeathSpinSpeed;
     this.scale.setTo(impScale, impScale);
     this.body.setCircle((frames[0].width * impScale) / 3.3);
     this.body.damping = (impBaseDamping * impScale);
@@ -37,6 +38,12 @@ var Imp = function (game, objectGroup, collisionGroup, index) {
     this.animations.play('walk', 10, true);
 
 
+    // Death Filter
+    this.deathFilter = game.add.filter('Gray');
+    this.deathFilter.gray = 0;
+    this.filters = [this.deathFilter];
+
+
     game.time.events.add(1000, function(){
         updateImpHealth(this);
     }, this);
@@ -45,6 +52,7 @@ var Imp = function (game, objectGroup, collisionGroup, index) {
 Imp.prototype = Object.create(Phaser.Sprite.prototype);
 Imp.prototype.constructor = Imp;
 Imp.prototype.turnToTarget = null;
+Imp.prototype.isDying = false;
 Imp.prototype.update = function() {
 
   // Bring back into the world if this has escaped
@@ -81,10 +89,28 @@ Imp.prototype.update = function() {
 
 
   // Health check
-  if(this.body.health <= 0) {
+  if(this.body.health <= 0 && !this.isDying) {
+    this.isDying = true;
     impaled.play();
-    this.destroy();
+    this.deathFilter.gray = 1;
+
+    game.time.events.add(impDeathSequenceLength, function(){
+      this.destroy();
+      this.isDying = false;
+    }, this);
+
   }
+
+
+  if(this.isDying) {
+    this.body.rotation += game.math.degToRad(this.deathSpinSpeed);
+    var newScaleX = this.scale.x - impDeathScaleSpeed;
+    var newScaleY = this.scale.y - impDeathScaleSpeed;
+
+    this.scale.setTo(newScaleX, newScaleY);
+    this.deathSpinSpeed += impDeathSpinSpeedIncrement;
+  }
+
 
 };
 
