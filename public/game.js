@@ -1,7 +1,6 @@
 /* global Phaser */
 var game;
-var carrot;
-
+var cursors;
 
 
 // Track some timing stuff
@@ -11,7 +10,6 @@ var startTime = 0;
 var elapsedTime = 0;
 var previousElapsedTime = 0;
 var timeSinceLastTick = 0;            // Difference between elapsed and previous elapsed
-
 
 
 window.onload = function() {
@@ -44,12 +42,7 @@ playGame.prototype = {
         // Init Physics system
         game.physics.startSystem(Phaser.Physics.P2JS);
         game.physics.p2.setImpactEvents(true);
-        game.physics.p2.restitution = 1.1;
-
-
-        // game.physics.p2.friction = 10000;
-        // game.physics.p2.applyDamping = false;
-        game.physics.p2.frameRate = 1 / 25;
+        game.physics.p2.restitution = physicsBaseRestitution;
 
 
         // Init Input
@@ -58,16 +51,13 @@ playGame.prototype = {
 
         // Create some objects, apply physics to entire Group
         impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
-        for (var i = 0; i < 6; i++)
+        for (var i = 0; i < 10; i++)
         {
-                var impScale = game.rnd.realInRange(1, 1.7);
+                var impScale = game.rnd.realInRange(impScaleLimits[0], impScaleLimits[1]);
 
                 imp = impGroup.create(game.world.randomX, game.world.randomY, 'imp');
                 imp.body.setCircle((imp.width * impScale) / 2);
-                imp.body.thrust(2000);
-                imp.body.damping = 0.1;      // Deceleration
-
-
+                imp.body.damping = impBaseDamping;      // Deceleration
                 imp.scale.setTo(impScale, impScale);
 
                 // Track collisions with anything
@@ -77,9 +67,18 @@ playGame.prototype = {
 
     },
     update: function(){
+        updateImps();
         updateTimer();
     }
 };
+
+
+function updateImps() {
+    impGroup.forEach(function(imp) {
+        imp.body.thrust(impBaseThrust);
+        imp.body.rotation += 0.01;
+    }, this);
+}
 
 
 function updateTimer() {
