@@ -16,7 +16,7 @@ var Imp = function (game, objectGroup, collisionGroup, index) {
     this.scale.setTo(impScale, impScale);
     this.body.setCircle((frames[0].width * impScale) / 3.3);
     this.body.damping = (impBaseDamping * impScale);
-    this.body.rotation = (180/Math.PI) * impRotation;
+    // this.body.rotation = (180/Math.PI) * impRotation;
     this.id='imp_'+index;
     // setting anchor forwards creates a swinging effect on rotation
     this.anchor.y = 0.33
@@ -41,25 +41,26 @@ Imp.prototype.update = function() {
 
   // Bring back into the world if this has escaped
   var turnToTargetLocal = this.turnToTarget;
-  var isOutside = (this.x+this.width < 0) || (this.y+this.height < 0) ||  (this.x > game.width) || (this.y > game.height);
+  var isOutside =
+    (this.x+this.width < 0 - worldBoundsOffset) ||
+    (this.y+this.height < 0 - worldBoundsOffset) ||
+    (this.x > game.width + worldBoundsOffset) ||
+    (this.y > game.height + worldBoundsOffset);
+
   if(isOutside) {
     turnToTargetLocal = { x: game.width / 2, y: game.height / 2};
-    // console.log(turnToTargetLocal);
   }
 
 
   // Got somewhere to go? Or are you just driftwood?
-  if(this.turnToTarget !== null) {
-    // console.log(this.turnToTarget);
+  if(turnToTargetLocal !== null) {
     accelerateToObject(this, turnToTargetLocal, impBaseThrust);
-    var distance = getDistance(this, turnToTargetLocal);
-    if(distance < turnToTargetOffset) {
+    turnToFace(this, turnToTargetLocal);
+    var distanceFromTarget = getDistance(this, turnToTargetLocal);
+    if(distanceFromTarget < turnToTargetOffset) {
       this.turnToTarget = null;
     }
 
-    // var targetAngle = this.game.math.angleBetween(this.x, this.y, turnToTargetLocal.x, turnToTargetLocal.y);
-    // console.log(targetAngle * (180/Math.PI));
-    // this.body.rotation = (180/Math.PI) * targetAngle;
   } else {
       this.body.thrust(impBaseThrust);
   }

@@ -269,12 +269,34 @@ function updateClickLine(x1, y1, x2, y2){
 
 
 function accelerateToObject(obj1, obj2, speed) {
-    if (typeof speed === 'undefined') { speed = 60; }
-    // var angle = game.math.angleBetween(obj1.x, obj1.y, obj2.x, obj2.y);
+    if (typeof speed === 'undefined') { speed = impBaseThrust; }
     var angle = Math.atan2(obj2.y - obj1.y, obj2.x - obj1.x);
-    obj1.body.rotation = angle + game.math.degToRad(90);  // correct angle of angry bullets (depends on the sprite used)
     obj1.body.force.x = Math.cos(angle) * speed;    // accelerateToObject
     obj1.body.force.y = Math.sin(angle) * speed;
+}
+
+
+function turnToFace(obj1, obj2) {
+
+  var point1 = new Phaser.Point(obj1.x, obj1.y);
+  var point2 = new Phaser.Point(obj2.x, obj2.y);
+  var targetAngle = point1.angle(point2) + game.math.degToRad(90);
+  var difference = targetAngle - obj1.body.rotation;
+
+  if (difference > game.math.PI)
+  {
+      difference = ((2 * game.math) - difference);
+  }
+  if (difference < -game.math)
+  {
+      difference = ((2 * game.math) + difference);
+  }
+
+  // Move the character's rotation a set amount per unit time
+  var delta = (difference < 0) ? -rotationChangePerSecond : rotationChangePerSecond;
+  var rotateDiff = delta * timeSinceLastTick;
+  obj1.body.rotation += rotateDiff;
+
 }
 
 
@@ -327,3 +349,41 @@ spider.animations.add('walk');
 spider.animations.play('walk', 4, true);
 spider.scale.setTo(0.15, 0.15);
 */
+
+
+
+
+/*
+ * Easing Functions - inspired from http://gizma.com/easing/
+ * only considering the t value for the range [0, 1] => [0, 1]
+ */
+/* jshint ignore:start */
+EasingFunctions = {
+  // no easing, no acceleration
+  linear: function (t) { return t },
+  // accelerating from zero velocity
+  easeInQuad: function (t) { return t*t },
+  // decelerating to zero velocity
+  easeOutQuad: function (t) { return t*(2-t) },
+  // acceleration until halfway, then deceleration
+  easeInOutQuad: function (t) { return t<.5 ? 2*t*t : -1+(4-2*t)*t },
+  // accelerating from zero velocity
+  easeInCubic: function (t) { return t*t*t },
+  // decelerating to zero velocity
+  easeOutCubic: function (t) { return (--t)*t*t+1 },
+  // acceleration until halfway, then deceleration
+  easeInOutCubic: function (t) { return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1 },
+  // accelerating from zero velocity
+  easeInQuart: function (t) { return t*t*t*t },
+  // decelerating to zero velocity
+  easeOutQuart: function (t) { return 1-(--t)*t*t*t },
+  // acceleration until halfway, then deceleration
+  easeInOutQuart: function (t) { return t<.5 ? 8*t*t*t*t : 1-8*(--t)*t*t*t },
+  // accelerating from zero velocity
+  easeInQuint: function (t) { return t*t*t*t*t },
+  // decelerating to zero velocity
+  easeOutQuint: function (t) { return 1+(--t)*t*t*t*t },
+  // acceleration until halfway, then deceleration
+  easeInOutQuint: function (t) { return t<.5 ? 16*t*t*t*t*t : 1+16*(--t)*t*t*t*t }
+}
+/* jshint ignore:end */
