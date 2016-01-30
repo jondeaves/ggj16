@@ -13,10 +13,10 @@ var timeSinceLastTick = 0;            // Difference between elapsed and previous
 
 
 window.onload = function() {
-    game = new Phaser.Game(800, 480, Phaser.AUTO, 'game_canvas');
-    game.state.add("StartGame", startGame);
-    game.state.add("PlayGame", playGame);
-    game.state.start("PlayGame");
+  game = new Phaser.Game(800, 480, Phaser.AUTO, 'game_canvas');
+  game.state.add("StartGame", startGame);
+  game.state.add("PlayGame", playGame);
+  game.state.start("PlayGame");
 };
 
 
@@ -24,81 +24,93 @@ var startGame = function(){};
 var playGame = function(){};
 
 startGame.prototype = {
-    preload: function() {
-        game.load.image("splash", "assets/bg/splash.jpg");
-    },
-    create: function(){
-        game.add.image(0, 0, "splash");
-    },
-    update: function(){ }
+  preload: function() {
+    game.load.image("splash", "assets/bg/splash.jpg");
+  },
+  create: function(){
+    game.add.image(0, 0, "splash");
+  },
+  update: function(){ }
 };
 
 playGame.prototype = {
-    preload: function() {
-        game.load.image("imp", "assets/sprites/parrot2.png");
-    },
-    create: function(){
+  preload: function() {
+    game.load.image("imp", "assets/sprites/parrot2.png");
+  },
+  create: function(){
 
-        // Init Physics system
-        game.physics.startSystem(Phaser.Physics.P2JS);
-        game.physics.p2.setImpactEvents(true);
-        game.physics.p2.restitution = physicsBaseRestitution;
-
-
-        // Init Input
-        cursors = game.input.keyboard.createCursorKeys();
+    // Init Physics system
+    game.physics.startSystem(Phaser.Physics.P2JS);
+    game.physics.p2.setImpactEvents(true);
+    game.physics.p2.restitution = physicsBaseRestitution;
 
 
-        // Create some objects, apply physics to entire Group
-        impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
-        for (var i = 0; i < 10; i++)
-        {
-                var impScale = game.rnd.realInRange(impScaleLimits[0], impScaleLimits[1]);
-
-                imp = impGroup.create(game.world.randomX, game.world.randomY, 'imp');
-                imp.body.setCircle((imp.width * impScale) / 2);
-                imp.body.damping = impBaseDamping;      // Deceleration
-                imp.scale.setTo(impScale, impScale);
-                imp.id="imp"+i;
-
-                // Track collisions with anything
-                imp.body.onBeginContact.add(objectCollision, this);
-        }
+    // Init Input
+    cursors = game.input.keyboard.createCursorKeys();
 
 
-    },
-    update: function(){
-        updateImps();
-        updateTimer();
+    // Create some objects, apply physics to entire Group
+    impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
+    impCollisionGroup = game.physics.p2.createCollisionGroup();
+
+    for (var i = 0; i < 1; i++)
+    {
+      var impScale = game.rnd.realInRange(impScaleLimits[0], impScaleLimits[1]);
+
+      imp = impGroup.create(game.world.randomX, game.world.randomY, 'imp');
+      imp.scale.setTo(impScale, impScale);
+      imp.body.setCircle((imp.width * impScale) / 2);
+      imp.body.damping = impBaseDamping;
+      imp.id="imp"+i;
 
 
-
-      if (game.input.mousePointer.isDown){
-        var nearest = getNearest(impGroup, game.input );
-        console.log(nearest.id);
-      }
-
+      // Set-up Collisions
+      imp.body.setCollisionGroup(impCollisionGroup);
+      imp.body.collideWorldBounds = false;
+      imp.body.collides([impCollisionGroup]);
+      imp.body.onBeginContact.add(objectCollision, this);
 
     }
+
+
+  },
+  update: function(){
+    updateImps();
+    updateTimer();
+
+
+
+    if (game.input.mousePointer.isDown){
+      var nearest = getNearest(impGroup, game.input );
+      console.log(nearest.id);
+    }
+
+  }
 };
 
 
 function updateImps() {
-    impGroup.forEach(function(imp) {
-        imp.body.thrust(impBaseThrust);
-        imp.body.rotation += 0.01;
-    }, this);
+  impGroup.forEach(function(imp) {
+    imp.body.thrust(impBaseThrust);
+
+    // Bring back into the world if imp has escaped
+    var isOutside = (imp.x+imp.width < 0) || (imp.y+imp.height < 0) ||  (imp.x > game.width) || (imp.y > game.height);
+    if(isOutside) {
+      var targetAngle = this.game.math.angleBetween(imp.x, imp.y, game.width / 2, game.height / 2);
+      imp.body.rotation = (180/Math.PI) * targetAngle;
+    }
+  }, this);
 }
 
 
 function updateTimer() {
-    // Time Tracking
-    elapsedTime = game.time.time - startTime;
-    if(previousElapsedTime === 0) {
-        previousElapsedTime = elapsedTime;
-    }
-    timeSinceLastTick = elapsedTime - previousElapsedTime;
-    previousElapsedTime = elapsedTime;                                          // We are finished previous time at time point
+  // Time Tracking
+  elapsedTime = game.time.time - startTime;
+  if(previousElapsedTime === 0) {
+    previousElapsedTime = elapsedTime;
+  }
+  timeSinceLastTick = elapsedTime - previousElapsedTime;
+  previousElapsedTime = elapsedTime;                                          // We are finished previous time at time point
 }
 
 
@@ -106,24 +118,23 @@ function updateTimer() {
 
 function objectCollision (body, bodyB, shapeA, shapeB, equation) {
 
-    //  The block hit something.
-    //
-    //  This callback is sent 5 arguments:
-    //
-    //  The Phaser.Physics.P2.Body it is in contact with. *This might be null* if the Body was created directly in the p2 world.
-    //  The p2.Body this Body is in contact with.
-    //  The Shape from this body that caused the contact.
-    //  The Shape from the contact body.
-    //  The Contact Equation data array.
-    //
-    //  The first argument may be null or not have a sprite property, such as when you hit the world bounds.
-    if (body) {
-        result = 'You last hit: ' + body.sprite.key;
-    }
-    else {
-        result = 'You last hit: The wall :)';
-    }
-    console.log(result);
+  //  The block hit something.
+  //
+  //  This callback is sent 5 arguments:
+  //
+  //  The Phaser.Physics.P2.Body it is in contact with. *This might be null* if the Body was created directly in the p2 world.
+  //  The p2.Body this Body is in contact with.
+  //  The Shape from this body that caused the contact.
+  //  The Shape from the contact body.
+  //  The Contact Equation data array.
+  //
+  //  The first argument may be null or not have a sprite property, such as when you hit the world bounds.
+  if (body) {
+    result = 'You last hit: ' + body.sprite.key;
+  }
+  else {
+    result = 'You last hit: The wall :)';
+  }
 
 }
 
