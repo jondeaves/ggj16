@@ -67,13 +67,13 @@ playGame.prototype = {
     for (var i = 0; i < 20; i++)
     {
       var impScale = game.rnd.realInRange(impScaleLimits[0], impScaleLimits[1]);
+      var frames = game.cache.getFrameData('imp').getFrames();
 
       imp = impGroup.create(game.world.randomX, game.world.randomY, 'imp');
       imp.scale.setTo(impScale, impScale);
-      imp.body.setCircle((imp.frame.width * impScale) / 2);
+      imp.body.setCircle((frames[0].width * impScale) / 2);
       imp.body.damping = (impBaseDamping * impScale);
       imp.id="imp"+i;
-      console.log(imp.frame);
 
 
       // Set-up Collisions
@@ -120,7 +120,6 @@ function updateImps() {
 
     // Bring back into the world if imp has escaped
     var isOutside = (imp.x+imp.width < 0) || (imp.y+imp.height < 0) ||  (imp.x > game.width) || (imp.y > game.height);
-    isOutside = true;
     if(isOutside) {
       var targetAngle = this.game.math.angleBetween(imp.x, imp.y, game.width / 2, game.height / 2);
       imp.body.rotation = (180/Math.PI) * targetAngle;
