@@ -42,16 +42,28 @@ startGame.prototype = {
 
 playGame.prototype = {
   preload: function() {
+    game.load.image("background", "assets/bg/screenMockUp.png");
     game.load.audio('mountain', 'assets/audio/music/pImp-gasm.mp3');
+
     game.load.spritesheet('imp', 'assets/sprites/imp2.png', 676, 764, 2);
+    game.load.spritesheet('sheep', 'assets/sprites/sheep.png', 324, 473, 2);
+    game.load.spritesheet('spider', 'assets/sprites/spider.png', 422, 490, 3);
   },
   create: function(){
+
+    // Pretty
+    var bgImage = game.add.image(0, 0, "background");
+    bgImage.width = 800;
+    bgImage.height = 480;
+
 
     // Init Physics system
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.setImpactEvents(true);
     game.physics.p2.restitution = physicsBaseRestitution;
 
+
+    // Sounds good
     songMountain = game.add.audio('mountain');
     songMountain.play();
 
@@ -64,7 +76,7 @@ playGame.prototype = {
     impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
     impCollisionGroup = game.physics.p2.createCollisionGroup();
 
-    for (var i = 0; i < 20; i++)
+    for (var i = 0; i < 2; i++)
     {
       var impScale = game.rnd.realInRange(impScaleLimits[0], impScaleLimits[1]);
       var frames = game.cache.getFrameData('imp').getFrames();
@@ -210,3 +222,25 @@ function updateClickLine(x1, y1, x2, y2){
   clickLine.end.x =  x2;
   clickLine.end.y =y2;
 }
+
+
+
+
+
+
+/*
+imp = game.add.sprite(60, 200, 'imp');
+imp.animations.add('walk');
+imp.animations.play('walk', 10, true);
+imp.scale.setTo(0.1, 0.1);
+
+sheep = game.add.sprite(260, 200, 'sheep');
+sheep.animations.add('walk');
+sheep.animations.play('walk', 2, true);
+sheep.scale.setTo(0.14, 0.14);
+
+spider = game.add.sprite(460, 200, 'spider');
+spider.animations.add('walk');
+spider.animations.play('walk', 4, true);
+spider.scale.setTo(0.15, 0.15);
+ */
