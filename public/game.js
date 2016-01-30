@@ -14,6 +14,10 @@ var timeSinceLastTick = 0;            // Difference between elapsed and previous
 var clickPoint = null;
 var clickRelease = null;
 var clickNearestImp = null;
+
+var rectUpper = new Phaser.Rectangle(0, screenWidthY*0.3, screenWidthX*0.45, screenWidthY*0.03);
+var rectLowerr = new Phaser.Rectangle(0, screenWidthY*0.65, screenWidthX*0.45, screenWidthY*0.03);
+var rectLeft = new Phaser.Rectangle(0, screenWidthY*0.3, screenWidthY*0.03, screenWidthY*0.35);
 var clickLine = new Phaser.Line(0, 0, 0, 0);
 var clickCircle = new Phaser.Circle(0, 0,0);
 var filter;
@@ -122,6 +126,25 @@ playGame.prototype = {
     game.physics.p2.setImpactEvents(true);
     game.physics.p2.restitution = physicsBaseRestitution;
 
+    // var rectUpper2 = game.add.sprite(200, 200, null);
+    // game.physics.enable(rectUpper2, Phaser.Physics.p2);
+    // rectUpper2.body.setSize(50, 50, 0, 0);
+
+
+      kinematic1 = game.add.sprite(200, 200, rectUpper);
+      //  kinematic2 = game.add.sprite(500, 500, 'atari');
+    game.add.sprite(rectUpper);
+    game.add.sprite(rectLowerr);
+    game.add.sprite(rectLeft);
+
+    game.physics.p2.enable(rectUpper);
+    game.physics.p2.enable(rectLowerr);
+    game.physics.p2.enable(rectLeft);
+    debugger;
+    rectUpper.body.kinematic = true;
+    // rectLowerr.body.kinematic = true;
+    // rectLeft.body.kinematic = true;
+
 
     // Sounds good
 
@@ -172,8 +195,12 @@ playGame.prototype = {
   },
   render: function() {
     game.debug.geom(clickLine, '#ff0000');
-    game.debug.lineInfo(clickLine, 32, 32);
+    // game.debug.lineInfo(clickLine, 32, 32);
     game.debug.geom(clickCircle,'#cfffff', false);
+    game.debug.geom(rectUpper, 'rgba(200,200,200,1)');
+    game.debug.geom(rectLowerr, 'rgba(200,200,200,1)');
+    game.debug.geom(rectLeft, 'rgba(200,200,200,1)');
+
   }
 };
 
