@@ -141,7 +141,7 @@ playGame.prototype = {
     game.physics.p2.enable(rectLowerr);
     game.physics.p2.enable(rectLeft);
     debugger;
-    rectUpper.body.kinematic = true;
+    // rectUpper.body.kinematic = true;
     // rectLowerr.body.kinematic = true;
     // rectLeft.body.kinematic = true;
 
