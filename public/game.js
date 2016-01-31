@@ -531,7 +531,7 @@ function triggerSacrifice(imp) {
     impWin2.play();
   }
    Math.floor((Math.random() * 2));
-  bgImage.alpha -= 1/gameLoseCount;
+  bgImage.alpha -= 1/gameWinCount;
   if (bgImage.alpha <1){
     // win condition triggered;
   }
