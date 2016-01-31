@@ -4,12 +4,13 @@ var Imp = function (game, objectGroup, collisionGroup, index, coneGroup) {
     // var impRotation = game.rnd.integerInRange(0, 360);
     var impRotation = 0;
     var impSprite = game.rnd.integerInRange(1, 2);
-    var frames = game.cache.getFrameData('imp'+impSprite).getFrames();
+    var impSpriteKey = 'imp';
+    var frames = game.cache.getFrameData(impSpriteKey+impSprite).getFrames();
     var impSpawn = getSpawnLocation();
 
     // Init Object
     // Phaser.Sprite.call(this, game, game.world.randomX, game.world.randomY, "imp"+impSprite);
-    Phaser.Sprite.call(this, game, impSpawn.position.x, impSpawn.position.y, "imp"+impSprite);
+    Phaser.Sprite.call(this, game, impSpawn.position.x, impSpawn.position.y, impSpriteKey+impSprite);
     game.physics.p2.enable(this, false);
     objectGroup.add(this);
 
@@ -34,14 +35,11 @@ var Imp = function (game, objectGroup, collisionGroup, index, coneGroup) {
 
 
     // Animate
-    this.animations.add('walk');
+    var deathFrame = (impSprite === 1) ? 3 : 4;
+    this.animations.add('walk', [0, 1, 2]);
+    this.animations.add('death', [deathFrame]);
     this.animations.play('walk', 10, true);
-
-
-    // Death Filter
-    this.deathFilter = game.add.filter('Gray');
-    this.deathFilter.gray = 0;
-    this.filters = [this.deathFilter];
+    console.log(deathFrame);
 
 
     game.time.events.add(1000, function(){
@@ -96,7 +94,7 @@ Imp.prototype.update = function() {
   if(this.body.health <= 0 && !this.isDying) {
     this.isDying = true;
     impaled.play();
-    this.deathFilter.gray = 1;
+    this.animations.play('death', 10, true);
 
     game.time.events.add(impDeathSequenceLength, function(){
       this.destroy();
