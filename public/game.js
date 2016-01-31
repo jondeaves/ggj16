@@ -92,8 +92,8 @@ playGame.prototype = {
     game.load.image("coneVert", "assets/sprites/spriteConeVertical.png");
 
     // spritesheets
-    game.load.spritesheet('imp1', 'assets/sprites/sprite_imp_1.png', 676, 764, 2);
-    game.load.spritesheet('imp2', 'assets/sprites/sprite_imp_2.png', 616, 669, 3);
+    game.load.spritesheet('imp1', 'assets/sprites/sprite_imp_death_1.png', 676, 764, 4);
+    game.load.spritesheet('imp2', 'assets/sprites/sprite_imp_death_2.png', 616, 669, 5);
     game.load.spritesheet('sheep', 'assets/sprites/sheep.png', 324, 473, 2);
     game.load.spritesheet('spider', 'assets/sprites/spider.png', 422, 490, 3);
 
