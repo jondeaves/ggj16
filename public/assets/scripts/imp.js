@@ -97,6 +97,7 @@ Imp.prototype.update = function() {
     this.animations.play('death', 10, true);
 
     game.time.events.add(impDeathSequenceLength, function(){
+      crash.play();
       addBlobs({x:this.x, y:this.y}, Math.floor((Math.random() * 12) + 8));
       this.destroy();
       this.isDying = false;

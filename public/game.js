@@ -27,6 +27,7 @@ var particle;
 
 // audio
 var songMountain;
+var crash;
 var nuuuu;
 var i_made_it;
 var impaled;
@@ -85,6 +86,8 @@ playGame.prototype = {
     game.load.audio('bump4', 'assets/audio/sfx/bump4.mp3');
     game.load.audio('impWin', 'assets/audio/sfx/impWin.mp3');
     game.load.audio('impWin2', 'assets/audio/sfx/impWin2.mp3');
+    game.load.audio('crash', 'assets/audio/sfx/crash.mp3');
+
 
     // images
     game.load.image("background", "assets/bg/screenMockUp.png");
@@ -146,6 +149,7 @@ playGame.prototype = {
     bump4 = game.add.audio('bump4');
     impWin = game.add.audio('impWin');
     impWin2 = game.add.audio('impWin2');
+    crash = game.add.audio('crash');
 
     songMountain.play();
 
@@ -212,7 +216,6 @@ function updateTimer() {
 
 
 function objectCollision (body, bodyB, shapeA, shapeB, equation) {
-
   //  The block hit something.
   //
   //  This callback is sent 5 arguments:
@@ -245,7 +248,6 @@ function getNearest(arrIn, pointIn){
   var nearest = null;
   var currentNearestDistance = 10000000000000;
   var dist;
-  // console.log(arrIn.length);
   arrIn.forEach(function(obj){
     dist = getDistance(pointIn, obj.position);
     if (dist < currentNearestDistance){
@@ -272,7 +274,7 @@ function setupLevel(){
     updateClickLine(0, 0, 0, 0 );
     clickNearestImp.turnToTarget = e;
     clickCircle.setTo(e.x, e.y, 2);
-    yes.play();
+    // yes.play();
   };
 }
 
