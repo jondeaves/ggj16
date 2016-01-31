@@ -430,7 +430,7 @@ function setupDropoff() {
   var coneLine1 = game.add.sprite(200, 140, 'coneHor');
   var coneLine2 = game.add.sprite(200, 320, 'coneHor');
   var coneLine3 = game.add.sprite(20, 230, 'coneVert');
-  pentagram = game.add.sprite(50, 165, 'pentagram');
+  pentagram = game.add.sprite(55, 167, 'pentagram');
   impress = game.add.sprite(60, 10, 'impress');
   impress.scale.setTo(0.7, 0.7);
   impress.visible = false;
