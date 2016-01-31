@@ -5,6 +5,8 @@ var game;
 // Track some timing stuff
 var gameTimer;
 
+var impDeaths = 0;
+
 var startTime = 0;
 var elapsedTime = 0;
 var previousElapsedTime = 0;
@@ -21,6 +23,8 @@ var clickLine = new Phaser.Line(0, 0, 0, 0);
 var clickCircle = new Phaser.Circle(0, 0,0);
 var filter;
 var bgImage;
+var pentagram;
+var pentImp = null;
 
 var particles = [];
 var particle;
@@ -45,13 +49,13 @@ var impWin;
 var impWin2;
 var player;
 
-
 window.onload = function() {
   game = new Phaser.Game(screenWidthX, screenWidthY, Phaser.AUTO, 'game_canvas');
   game.state.add("StartGame", startGame);
   game.state.add("InstructionScreen", instructionScreen);
   game.state.add("CreditScreen", creditScreen);
   game.state.add("PlayGame", playGame);
+  game.state.add("WinGame", winGame);
   game.state.start("StartGame");
 };
 
@@ -60,6 +64,7 @@ var startGame = function(){};
 var instructionScreen = function() {};
 var creditScreen = function() {};
 var playGame = function(){};
+var winGame = function(){};
 
 startGame.prototype = {
   preload: function() {
@@ -146,6 +151,8 @@ playGame.prototype = {
     game.load.image("background", "assets/bg/screenMockUp.png");
     game.load.image("coneHor", "assets/sprites/spriteConeHorizontal.png");
     game.load.image("coneVert", "assets/sprites/spriteConeVertical.png");
+    game.load.image("pentagram", "assets/sprites/pentagram.png");
+    game.load.image("impress", "assets/sprites/impress.png");
 
     // spritesheets
     game.load.spritesheet('imp1', 'assets/sprites/sprite_imp_death_1.png', 676, 764, 4);
@@ -210,6 +217,7 @@ playGame.prototype = {
     // Create some objects, apply physics to entire Group
     coneGroup = game.physics.p2.createCollisionGroup();
     impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
+    impGroup.z = 100;
     impCollisionGroup = game.physics.p2.createCollisionGroup();
 
     for (var i = 0; i < gameStartingImpCount; ++i){
@@ -223,6 +231,16 @@ playGame.prototype = {
   },
   update: function(){
     updateTimer();
+
+    for (var i=0; i<impGroup.length; i++){
+      pentImp = impGroup.children[i];
+      if (pentImp.x < pentagram.x + pentagram.width &&
+   pentImp.x + pentImp.width > pentagram.x &&
+   pentImp.y < pentagram.y + pentagram.height &&
+   pentImp.height + pentImp.y > pentagram.y){
+     triggerSacrifice(pentImp);
+   }
+    }
 
 
     handleClickCircle();
@@ -255,6 +273,18 @@ playGame.prototype = {
 };
 
 
+winGame.prototype = {
+  preload: function() {
+    game.load.image("winScreen", "assets/bg/WinScreen.png");
+  },
+  create: function(){
+    var startScreen = game.add.image(0, 0, "winScreen");
+    startScreen.width = screenWidthX;
+    startScreen.height = screenWidthY;
+  },
+  update: function(){ }
+};
+
 function updateTimer() {
   // Time Tracking
   elapsedTime = game.time.time - startTime;
@@ -269,8 +299,7 @@ function updateTimer() {
 
 
 function objectCollision (body, bodyB, shapeA, shapeB, equation) {
-  // debugger;
-  console.log('collision');
+
   //  The block hit something.
   //
   //  This callback is sent 5 arguments:
@@ -347,9 +376,15 @@ function addBlobs(e, num){
 function setupDropoff() {
 
   // Add the image
-  coneLine1 = game.add.sprite(200, 140, 'coneHor');
-  coneLine2 = game.add.sprite(200, 320, 'coneHor');
-  coneLine3 = game.add.sprite(20, 230, 'coneVert');
+  var coneLine1 = game.add.sprite(200, 140, 'coneHor');
+  var coneLine2 = game.add.sprite(200, 320, 'coneHor');
+  var coneLine3 = game.add.sprite(20, 230, 'coneVert');
+  pentagram = game.add.sprite(50, 165, 'pentagram');
+  impress = game.add.sprite(60, 10, 'impress');
+  impress.scale.setTo(0.7, 0.7);
+  impress.visible = false;
+
+
 
   //  Enable if for physics. This creates a default rectangular body.
   game.physics.p2.enable( [ coneLine1, coneLine2, coneLine3 ]);
@@ -466,9 +501,35 @@ function spawnImp(schedule) {
 
 
 function triggerSacrifice(imp) {
-  bgImage.alpha -= 0.001;
+  if (Math.floor((Math.random() * 2)) == true){
+    i_made_it.play();
+  } else {
+    yes.play();
+  }
+  if (Math.floor((Math.random() * 2)) == true){
+    impWin.play();
+  } else {
+    impWin2.play();
+  }
+   Math.floor((Math.random() * 2));
+
+  bgImage.alpha -= gameWinOpacityIncrease;
+  if (bgImage.alpha <= 0.3){
+    // win condition triggered;
+    impress.visible = true;
+    game.time.events.add(2000, function(){
+      game.state.start("WinGame");
+    }, this);
+  }
 
   imp.destroy();
+}
+
+function impDeath(){
+  impDeaths ++;
+  if (impDeaths >= gameLoseCount){
+    // game lose condition
+  }
 }
 
 /*
