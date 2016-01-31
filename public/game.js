@@ -83,7 +83,6 @@ playGame.prototype = {
     game.load.audio('impWin', 'assets/audio/sfx/impWin.mp3');
     game.load.audio('impWin2', 'assets/audio/sfx/impWin2.mp3');
 
-
     // images
     game.load.image("background", "assets/bg/screenMockUp.png");
     game.load.image("coneHor", "assets/sprites/spriteConeHorizontal.png");
@@ -121,6 +120,7 @@ playGame.prototype = {
 
 
     // Init Physics system
+    game.world.setBounds(-1600, -1600, 1600, 1600);
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.setImpactEvents(true);
     game.physics.p2.restitution = physicsBaseRestitution;
@@ -163,7 +163,7 @@ playGame.prototype = {
   },
   update: function(){
     updateTimer();
-    bgImage.alpha -= 0.001;
+
 
     handleClickCircle();
     filter.update();
@@ -273,12 +273,6 @@ function setupDropoff() {
   coneLine2.body.static = true;
   coneLine3.body.static = true;
 
-
-  // Add to group
-  coneLine1.body.setCollisionGroup(coneGroup);
-  coneLine2.body.setCollisionGroup(coneGroup);
-  coneLine3.body.setCollisionGroup(coneGroup);
-
 }
 
 function updateClickLine(x1, y1, x2, y2){
@@ -382,6 +376,13 @@ function spawnImp(schedule) {
       spawnImp(true);
     }, this);
   }
+}
+
+
+function triggerSacrifice(imp) {
+  bgImage.alpha -= 0.001;
+
+  imp.destroy();
 }
 
 /*

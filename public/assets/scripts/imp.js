@@ -27,10 +27,10 @@ var Imp = function (game, objectGroup, collisionGroup, index, coneGroup) {
 
 
     // Set-up Collisions
-    this.body.setCollisionGroup(collisionGroup);
-    this.body.collideWorldBounds = false;
-    this.body.collides([collisionGroup, coneGroup]);
-    this.body.onBeginContact.add(objectCollision, this);
+    // this.body.setCollisionGroup(collisionGroup);
+    // this.body.collideWorldBounds = false;
+    // this.body.collides([collisionGroup, coneGroup]);
+    // this.body.onBeginContact.add(objectCollision, this);
 
 
     // Animate
