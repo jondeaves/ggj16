@@ -338,7 +338,7 @@ function updateTimer() {
 
 
 function objectCollision (body, bodyB, shapeA, shapeB, equation) {
-
+  // debugger;
   //  The block hit something.
   //
   //  This callback is sent 5 arguments:
@@ -353,6 +353,10 @@ function objectCollision (body, bodyB, shapeA, shapeB, equation) {
   if (body && body.health) {
     body.health -= impBumpDamage;
     // bodyB.health -= impBumpDamage;
+  } else if (bodyB && bodyB.health){
+    bodyB.health -= impBumpDamage;
+  } else if (this.body && this.body.health){
+    this.body.health-= impBumpDamage;
   }
   playBump(); // boiiing
   playOuch(); // sometimes says ouch
