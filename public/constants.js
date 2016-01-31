@@ -11,7 +11,8 @@ var gameSpeedIncreaseTimer = 2000;
 var minimumImpSpawnTime = 800;
 var maxThrustScaled = 500;
 var maxVelocityScaled = 15;
-var gameLoseCount = 20;  // number of imp fatalities until game fail
+var gameLoseCount = 40;  // number of imp fatalities until game fail
+var gameWinCount = 40;  // number of imp fatalities until game fail
 
 // Imps
 var rotationChangePerSecond = 0.0025;
@@ -22,7 +23,7 @@ var turnToTargetOffset = 30;                   // Distance before removing turn 
 var impMaxVelocity = 5;
 
 var impStartHealth = 100;                   // This divided by impTTL defines how much health is lost per second
-var impTTL = 30;                              // How long imp lives for
+var impTTL = 3;                              // How long imp lives for
 var impBumpDamage = 10;               // Amount of dmanage from collision
 
 var impDeathSequenceLength = 2400;      // Milliseconds death lasts

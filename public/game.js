@@ -47,6 +47,8 @@ var bump3;
 var bump4;
 var impWin;
 var impWin2;
+var click;
+
 var player;
 
 window.onload = function() {
@@ -56,6 +58,7 @@ window.onload = function() {
   game.state.add("CreditScreen", creditScreen);
   game.state.add("PlayGame", playGame);
   game.state.add("WinGame", winGame);
+  game.state.add("LoseGame", loseGame);
   game.state.start("StartGame");
 };
 
@@ -65,6 +68,7 @@ var instructionScreen = function() {};
 var creditScreen = function() {};
 var playGame = function(){};
 var winGame = function(){};
+var loseGame = function(){};
 
 startGame.prototype = {
   preload: function() {
@@ -144,6 +148,7 @@ playGame.prototype = {
     game.load.audio('bump4', 'assets/audio/sfx/bump4.mp3');
     game.load.audio('impWin', 'assets/audio/sfx/impWin.mp3');
     game.load.audio('impWin2', 'assets/audio/sfx/impWin2.mp3');
+    game.load.audio('click', 'assets/audio/sfx/click.mp3');
     game.load.audio('crash', 'assets/audio/sfx/crash.mp3');
 
 
@@ -209,6 +214,7 @@ playGame.prototype = {
     bump4 = game.add.audio('bump4');
     impWin = game.add.audio('impWin');
     impWin2 = game.add.audio('impWin2');
+    click = game.add.audio('click');
     crash = game.add.audio('crash');
 
     songMountain.play();
@@ -279,6 +285,19 @@ winGame.prototype = {
   },
   create: function(){
     var startScreen = game.add.image(0, 0, "winScreen");
+    startScreen.width = screenWidthX;
+    startScreen.height = screenWidthY;
+  },
+  update: function(){ }
+};
+
+
+loseGame.prototype = {
+  preload: function() {
+    game.load.image("loseScreen", "assets/bg/LoseScreen.png");
+  },
+  create: function(){
+    var startScreen = game.add.image(0, 0, "loseScreen");
     startScreen.width = screenWidthX;
     startScreen.height = screenWidthY;
   },
@@ -358,7 +377,7 @@ function setupLevel(){
     updateClickLine(0, 0, 0, 0 );
     clickNearestImp.turnToTarget = e;
     clickCircle.setTo(e.x, e.y, 2);
-    // yes.play();
+    click.play();
   };
 }
 
@@ -512,9 +531,9 @@ function triggerSacrifice(imp) {
     impWin2.play();
   }
    Math.floor((Math.random() * 2));
-
-  bgImage.alpha -= gameWinOpacityIncrease;
-  if (bgImage.alpha <= 0.3){
+  bgImage.alpha -= 1/gameLoseCount;
+  console.log(bgImage.alpha);
+  if (bgImage.alpha <0.3){
     // win condition triggered;
     impress.visible = true;
     game.time.events.add(2000, function(){
@@ -527,8 +546,10 @@ function triggerSacrifice(imp) {
 
 function impDeath(){
   impDeaths ++;
+
   if (impDeaths >= gameLoseCount){
     // game lose condition
+    game.state.start("LoseGame");
   }
 }
 
