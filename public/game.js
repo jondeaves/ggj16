@@ -440,7 +440,10 @@ function triggerSacrifice(imp) {
   }
    Math.floor((Math.random() * 2));
 
-  bgImage.alpha -= 0.001;
+  bgImage.alpha -= 0.025;
+  if (bgImage.alpha <1){
+    // win condition triggered;
+  }
 
   imp.destroy();
 }
