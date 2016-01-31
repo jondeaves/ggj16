@@ -86,8 +86,8 @@ playGame.prototype = {
 
     // images
     game.load.image("background", "assets/bg/screenMockUp.png");
-    game.load.image("coneHor", "assets/sprites/ConeLineHorz.png");
-    game.load.image("coneVert", "assets/sprites/ConeLineVert.png");
+    game.load.image("coneHor", "assets/sprites/spriteConeHorizontal.png");
+    game.load.image("coneVert", "assets/sprites/spriteConeVertical.png");
 
     // spritesheets
     game.load.spritesheet('imp1', 'assets/sprites/sprite_imp_1.png', 676, 764, 2);
@@ -117,8 +117,6 @@ playGame.prototype = {
 
     // slowly reduce this value as the game gets closer to completion
     bgImage.alpha = 0.99;
-    // bgImage2.opacity = 0.5;
-
     bgFlames.filters = [filter];
 
 
@@ -127,28 +125,8 @@ playGame.prototype = {
     game.physics.p2.setImpactEvents(true);
     game.physics.p2.restitution = physicsBaseRestitution;
 
-    // var rectUpper2 = game.add.sprite(200, 200, null);
-    // game.physics.enable(rectUpper2, Phaser.Physics.p2);
-    // rectUpper2.body.setSize(50, 50, 0, 0);
-
-
-      kinematic1 = game.add.sprite(200, 200, rectUpper);
-      //  kinematic2 = game.add.sprite(500, 500, 'atari');
-    game.add.sprite(rectUpper);
-    game.add.sprite(rectLowerr);
-    game.add.sprite(rectLeft);
-
-    game.physics.p2.enable(rectUpper);
-    game.physics.p2.enable(rectLowerr);
-    game.physics.p2.enable(rectLeft);
-
-    // rectUpper.body.kinematic = true;
-    // rectLowerr.body.kinematic = true;
-    // rectLeft.body.kinematic = true;
-
 
     // Sounds good
-
     songMountain = game.add.audio('mountain');
     nuuuu = game.add.audio('nuuuu');
     i_made_it = game.add.audio('i_made_it');
@@ -170,12 +148,16 @@ playGame.prototype = {
 
 
     // Create some objects, apply physics to entire Group
+    coneGroup = game.physics.p2.createCollisionGroup();
     impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
     impCollisionGroup = game.physics.p2.createCollisionGroup();
 
     for (var i = 0; i < gameStartingImpCount; ++i){
       spawnImp(i === (gameStartingImpCount - 1));
     }
+
+
+    setupDropoff();
 
     setupLevel();
   },
@@ -193,9 +175,6 @@ playGame.prototype = {
     game.debug.geom(clickLine, '#ff0000');
     // game.debug.lineInfo(clickLine, 32, 32);
     game.debug.geom(clickCircle,'#cfffff', false);
-    game.debug.geom(rectUpper, 'rgba(200,200,200,1)');
-    game.debug.geom(rectLowerr, 'rgba(200,200,200,1)');
-    game.debug.geom(rectLeft, 'rgba(200,200,200,1)');
 
   }
 };
@@ -277,6 +256,29 @@ function setupLevel(){
     clickCircle.setTo(e.x, e.y, 2);
     yes.play();
   };
+}
+
+function setupDropoff() {
+
+  // Add the image
+  coneLine1 = game.add.sprite(200, 140, 'coneHor');
+  coneLine2 = game.add.sprite(200, 320, 'coneHor');
+  coneLine3 = game.add.sprite(20, 230, 'coneVert');
+
+  //  Enable if for physics. This creates a default rectangular body.
+  game.physics.p2.enable( [ coneLine1, coneLine2, coneLine3 ]);
+
+  // Immovable object
+  coneLine1.body.static = true;
+  coneLine2.body.static = true;
+  coneLine3.body.static = true;
+
+
+  // Add to group
+  coneLine1.body.setCollisionGroup(coneGroup);
+  coneLine2.body.setCollisionGroup(coneGroup);
+  coneLine3.body.setCollisionGroup(coneGroup);
+
 }
 
 function updateClickLine(x1, y1, x2, y2){
@@ -369,7 +371,7 @@ function spawnImp(schedule) {
 
 
   if(canSpawn) {
-    var imp = new Imp(game, impGroup, impCollisionGroup, impGroup.length);
+    var imp = new Imp(game, impGroup, impCollisionGroup, impGroup.length, coneGroup);
     game.add.existing(imp);
     impGroup.add(imp);
   }

@@ -1,4 +1,4 @@
-var Imp = function (game, objectGroup, collisionGroup, index) {
+var Imp = function (game, objectGroup, collisionGroup, index, coneGroup) {
 
     var impScale = game.rnd.realInRange(impScaleLimits[0], impScaleLimits[1]);
     // var impRotation = game.rnd.integerInRange(0, 360);
@@ -29,7 +29,7 @@ var Imp = function (game, objectGroup, collisionGroup, index) {
     // Set-up Collisions
     this.body.setCollisionGroup(collisionGroup);
     this.body.collideWorldBounds = false;
-    this.body.collides([collisionGroup]);
+    this.body.collides([collisionGroup, coneGroup]);
     this.body.onBeginContact.add(objectCollision, this);
 
 
