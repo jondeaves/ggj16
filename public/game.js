@@ -338,7 +338,7 @@ function updateTimer() {
 
 
 function objectCollision (body, bodyB, shapeA, shapeB, equation) {
-
+  // debugger;
   //  The block hit something.
   //
   //  This callback is sent 5 arguments:
@@ -353,6 +353,10 @@ function objectCollision (body, bodyB, shapeA, shapeB, equation) {
   if (body && body.health) {
     body.health -= impBumpDamage;
     // bodyB.health -= impBumpDamage;
+  } else if (bodyB && bodyB.health){
+    bodyB.health -= impBumpDamage;
+  } else if (this.body && this.body.health){
+    this.body.health-= impBumpDamage;
   }
   playBump(); // boiiing
   playOuch(); // sometimes says ouch
@@ -430,7 +434,7 @@ function setupDropoff() {
   var coneLine1 = game.add.sprite(200, 140, 'coneHor');
   var coneLine2 = game.add.sprite(200, 320, 'coneHor');
   var coneLine3 = game.add.sprite(20, 230, 'coneVert');
-  pentagram = game.add.sprite(50, 165, 'pentagram');
+  pentagram = game.add.sprite(55, 167, 'pentagram');
   impress = game.add.sprite(60, 10, 'impress');
   impress.scale.setTo(0.7, 0.7);
   impress.visible = false;
@@ -564,9 +568,8 @@ function triggerSacrifice(imp) {
     impWin2.play();
   }
    Math.floor((Math.random() * 2));
-  bgImage.alpha -= 1/gameLoseCount;
-  console.log(bgImage.alpha);
-  if (bgImage.alpha <0.3){
+  bgImage.alpha -= 1/gameWinCount;
+  if (bgImage.alpha <0.1){
     // win condition triggered;
     impress.visible = true;
     game.time.events.add(2000, function(){
