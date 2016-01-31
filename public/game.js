@@ -47,6 +47,8 @@ var bump3;
 var bump4;
 var impWin;
 var impWin2;
+var click;
+
 var player;
 
 window.onload = function() {
@@ -142,6 +144,7 @@ playGame.prototype = {
     game.load.audio('bump4', 'assets/audio/sfx/bump4.mp3');
     game.load.audio('impWin', 'assets/audio/sfx/impWin.mp3');
     game.load.audio('impWin2', 'assets/audio/sfx/impWin2.mp3');
+    game.load.audio('click', 'assets/audio/sfx/click.mp3');
     game.load.audio('crash', 'assets/audio/sfx/crash.mp3');
 
 
@@ -206,6 +209,7 @@ playGame.prototype = {
     bump4 = game.add.audio('bump4');
     impWin = game.add.audio('impWin');
     impWin2 = game.add.audio('impWin2');
+    click = game.add.audio('click');
     crash = game.add.audio('crash');
 
     songMountain.play();
@@ -343,7 +347,7 @@ function setupLevel(){
     updateClickLine(0, 0, 0, 0 );
     clickNearestImp.turnToTarget = e;
     clickCircle.setTo(e.x, e.y, 2);
-    // yes.play();
+    click.play();
   };
 }
 
@@ -494,8 +498,7 @@ function triggerSacrifice(imp) {
     impWin2.play();
   }
    Math.floor((Math.random() * 2));
-
-  bgImage.alpha -= 0.025;
+  bgImage.alpha -= 1/gameLoseCount;
   if (bgImage.alpha <1){
     // win condition triggered;
   }
