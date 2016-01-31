@@ -216,6 +216,8 @@ function updateTimer() {
 
 
 function objectCollision (body, bodyB, shapeA, shapeB, equation) {
+  // debugger;
+  console.log('collision');
   //  The block hit something.
   //
   //  This callback is sent 5 arguments:
@@ -227,9 +229,9 @@ function objectCollision (body, bodyB, shapeA, shapeB, equation) {
   //  The Contact Equation data array.
   //
   //  The first argument may be null or not have a sprite property, such as when you hit the world bounds.
-  if (body) {
+  if (body && body.health) {
     body.health -= impBumpDamage;
-    bodyB.health -= impBumpDamage;
+    // bodyB.health -= impBumpDamage;
   }
   playBump(); // boiiing
   playOuch(); // sometimes says ouch
