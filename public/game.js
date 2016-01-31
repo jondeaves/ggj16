@@ -22,6 +22,9 @@ var clickCircle = new Phaser.Circle(0, 0,0);
 var filter;
 var bgImage;
 
+var particles = [];
+var particle;
+
 // audio
 var songMountain;
 var nuuuu;
@@ -176,6 +179,21 @@ playGame.prototype = {
     // game.debug.lineInfo(clickLine, 32, 32);
     game.debug.geom(clickCircle,'#cfffff', false);
 
+    for (var i=particles.length-1; i>0; i--){
+      particle = particles[i];
+      game.debug.geom(particle,'#af111c', true);
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      if (particle.radius > 1){
+        particle.radius -= 0.1;
+        particle.vx *= 0.99;
+        particle.vy *= 0.99;
+      } else {
+        particles.splice(i,1);
+      }
+
+    }
+
   }
 };
 
@@ -250,12 +268,23 @@ function setupLevel(){
 
   };
   game.input.mouse.onMouseUp = function (e){
-    // debugger;
+
     updateClickLine(0, 0, 0, 0 );
     clickNearestImp.turnToTarget = e;
     clickCircle.setTo(e.x, e.y, 2);
     yes.play();
   };
+}
+
+function addBlobs(e, num){
+  var blob;
+  for (var i=0; i<num; i++){
+    blob = new Phaser.Circle(e.x + Math.floor((Math.random() * 40) - 20),e.y + Math.floor((Math.random() * 40) - 20), Math.floor((Math.random() * 20) + 10));
+    blob.vx = (blob.x-e.x) /10;//  (Math.random() * 4) - 2;
+    blob.vy = (blob.y-e.y) /10; // (Math.random() * 4) - 2;
+    particles.push(blob);
+  }
+
 }
 
 function setupDropoff() {
