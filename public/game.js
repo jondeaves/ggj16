@@ -1,6 +1,5 @@
 /* global Phaser */
 var game;
-var cursors;
 
 
 // Track some timing stuff
@@ -87,6 +86,8 @@ playGame.prototype = {
 
     // images
     game.load.image("background", "assets/bg/screenMockUp.png");
+    game.load.image("coneHor", "assets/sprites/ConeLineHorz.png");
+    game.load.image("coneVert", "assets/sprites/ConeLineVert.png");
 
     // spritesheets
     game.load.spritesheet('imp1', 'assets/sprites/sprite_imp_1.png', 676, 764, 2);
@@ -165,10 +166,7 @@ playGame.prototype = {
     impWin = game.add.audio('impWin');
     impWin2 = game.add.audio('impWin2');
 
-    // songMountain.play();
-
-    // Init Input
-    cursors = game.input.keyboard.createCursorKeys();
+    songMountain.play();
 
 
     // Create some objects, apply physics to entire Group
