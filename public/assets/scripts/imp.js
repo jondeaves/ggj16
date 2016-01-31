@@ -39,8 +39,7 @@ var Imp = function (game, objectGroup, collisionGroup, index, coneGroup) {
     this.animations.add('walk', [0, 1, 2]);
     this.animations.add('death', [deathFrame]);
     this.animations.play('walk', 10, true);
-    console.log(deathFrame);
-
+    // console.log(deathFrame);
 
     game.time.events.add(1000, function(){
         updateImpHealth(this);
