@@ -23,7 +23,7 @@ var turnToTargetOffset = 30;                   // Distance before removing turn 
 var impMaxVelocity = 5;
 
 var impStartHealth = 100;                   // This divided by impTTL defines how much health is lost per second
-var impTTL = 3;                              // How long imp lives for
+var impTTL = 30;                              // How long imp lives for
 var impBumpDamage = 10;               // Amount of dmanage from collision
 
 var impDeathSequenceLength = 2400;      // Milliseconds death lasts
