@@ -27,7 +27,9 @@ var pentagram;
 var pentImp = null;
 
 var particles = [];
+var stars = [];
 var particle;
+var star;
 
 // audio
 var songMountain;
@@ -252,7 +254,6 @@ playGame.prototype = {
   },
   render: function() {
     game.debug.geom(clickLine, '#ff0000');
-    // game.debug.lineInfo(clickLine, 32, 32);
     game.debug.geom(clickCircle,'#cfffff', false);
 
     for (var i=particles.length-1; i>0; i--){
@@ -262,12 +263,31 @@ playGame.prototype = {
       particle.y += particle.vy;
       if (particle.radius > 1){
         particle.radius -= 0.1;
-        particle.vx *= 0.99;
-        particle.vy *= 0.99;
+        particle.vx *= 0.985;
+        particle.vy *= 0.985;
       } else {
         particles.splice(i,1);
       }
+    }
 
+    for (var i=stars.length-1; i>0; i--){
+      star = stars[i];
+      game.debug.geom(star,'#FFD700', true);
+      star.x += star.vx;
+      star.y += star.vy;
+      if (!star.shrink){
+        star.radius += 0.35;
+        star.vx *= 0.985;
+        star.vy *= 0.985;
+        if (star.radius > 18){
+          star.shrink = true;
+        }
+      } else {
+        star.radius -= 0.3;
+        if (star.radius <1){
+          stars.splice(i,1);
+        }
+      }
     }
 
   }
@@ -359,8 +379,20 @@ function addBlobs(e, num){
     blob.vy = (blob.y-e.y) /10; // (Math.random() * 4) - 2;
     particles.push(blob);
   }
-
 }
+
+function addStars(e, num){
+  var blob;
+  for (var i=0; i<num; i++){
+    blob = new Phaser.Circle(e.x + Math.floor((Math.random() * 40) - 20),e.y + Math.floor((Math.random() * 40) - 20), Math.floor((Math.random() * 20) + 10));
+    blob.vx = (blob.x-e.x) /6;//  (Math.random() * 4) - 2;
+    blob.vy = (blob.y-e.y) /6; // (Math.random() * 4) - 2;
+    stars.push(blob);
+  }
+}
+
+
+
 
 function setupDropoff() {
 
@@ -487,6 +519,7 @@ function spawnImp(schedule) {
 
 
 function triggerSacrifice(imp) {
+  addStars({x:imp.x, y:imp.y}, Math.floor((Math.random() * 8) + 6));
   if (Math.floor((Math.random() * 2)) == true){
     i_made_it.play();
   } else {
