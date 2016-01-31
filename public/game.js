@@ -208,7 +208,11 @@ function objectCollision (body, bodyB, shapeA, shapeB, equation) {
   //  The first argument may be null or not have a sprite property, such as when you hit the world bounds.
   if (body) {
     body.health -= impBumpDamage;
-    bodyB.health -= impBumpDamage;
+
+    if(bodyB.health !== null) {
+      bodyB.health -= impBumpDamage;
+    }
+
   }
   playBump(); // boiiing
   playOuch(); // sometimes says ouch
