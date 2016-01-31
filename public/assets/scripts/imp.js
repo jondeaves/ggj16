@@ -88,6 +88,10 @@ Imp.prototype.update = function() {
   }
 
 
+  // Limit max speed
+  constrainVelocity(this, impMaxVelocity);
+
+
   // Health check
   if(this.body.health <= 0 && !this.isDying) {
     this.isDying = true;
@@ -161,3 +165,28 @@ function updateImpHealth(imp) {
     }
   }
 }
+
+
+/*
+ * @source http://www.html5gamedevs.com/topic/4723-p2-physics-limit-the-speed-of-a-sprite/
+ */
+ function constrainVelocity(sprite, maxVelocity) {
+   var body = sprite.body;
+   var angle, currVelocitySqr, vx, vy;
+
+   vx = body.data.velocity[0];
+   vy = body.data.velocity[1];
+
+   currVelocitySqr = vx * vx + vy * vy;
+
+   if (currVelocitySqr > maxVelocity * maxVelocity) {
+     angle = Math.atan2(vy, vx);
+
+     vx = Math.cos(angle) * maxVelocity;
+     vy = Math.sin(angle) * maxVelocity;
+
+     body.data.velocity[0] = vx;
+     body.data.velocity[1] = vy;
+   }
+
+ }
