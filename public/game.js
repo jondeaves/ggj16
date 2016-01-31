@@ -49,22 +49,75 @@ var player;
 window.onload = function() {
   game = new Phaser.Game(screenWidthX, screenWidthY, Phaser.AUTO, 'game_canvas');
   game.state.add("StartGame", startGame);
+  game.state.add("InstructionScreen", instructionScreen);
+  game.state.add("CreditScreen", creditScreen);
   game.state.add("PlayGame", playGame);
-  game.state.start("PlayGame");
+  game.state.start("StartGame");
 };
 
 
 var startGame = function(){};
+var instructionScreen = function() {};
+var creditScreen = function() {};
 var playGame = function(){};
 
 startGame.prototype = {
   preload: function() {
-    game.load.image("splash", "assets/bg/splash.jpg");
+    game.load.image("startScreen", "assets/bg/StartScreen.png");
   },
   create: function(){
-    game.add.image(0, 0, "splash");
+    var startScreen = game.add.image(0, 0, "startScreen");
+    startScreen.width = screenWidthX;
+    startScreen.height = screenWidthY;
   },
-  update: function(){ }
+  update: function(){
+
+    game.input.mouse.onMouseUp = function (e){
+
+      if(game.input.y > 220 && game.input.y < 280) {
+        game.state.start("PlayGame");
+      }
+      if(game.input.y > 295 && game.input.y < 335) {
+        game.state.start("InstructionScreen");
+      }
+      if(game.input.y > 350 && game.input.y < 395) {
+        game.state.start("CreditScreen");
+      }
+
+    };
+  }
+};
+
+instructionScreen.prototype = {
+  preload: function() {
+    game.load.image("instructionScreen", "assets/bg/placeholderInstructionScreen.png");
+  },
+  create: function(){
+    var startScreen = game.add.image(0, 0, "instructionScreen");
+    startScreen.width = screenWidthX;
+    startScreen.height = screenWidthY;
+  },
+  update: function(){
+    game.input.mouse.onMouseUp = function (e){
+      game.state.start("StartGame");
+    };
+  }
+};
+
+creditScreen.prototype = {
+  preload: function() {
+    game.load.image("creditScreen", "assets/bg/CreditsScreen.png");
+  },
+  create: function(){
+    var startScreen = game.add.image(0, 0, "creditScreen");
+    startScreen.width = screenWidthX;
+    startScreen.height = screenWidthY;
+  },
+  update: function(){
+    game.input.mouse.onMouseUp = function (e){
+      game.state.start("StartGame");
+    };
+  }
 };
 
 playGame.prototype = {
