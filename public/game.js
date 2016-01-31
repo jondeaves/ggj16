@@ -120,7 +120,7 @@ playGame.prototype = {
 
 
     // Init Physics system
-    game.world.setBounds(-1600, -1600, 1600, 1600);
+    game.world.setBounds(-400, -400, 1600, 1200);
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.setImpactEvents(true);
     game.physics.p2.restitution = physicsBaseRestitution;
