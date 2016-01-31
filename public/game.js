@@ -218,8 +218,8 @@ playGame.prototype = {
 
 
     setupDropoff();
-
     setupLevel();
+    increaseGameSpeed();
   },
   update: function(){
     updateTimer();
@@ -487,3 +487,30 @@ spider.animations.add('walk');
 spider.animations.play('walk', 4, true);
 spider.scale.setTo(0.15, 0.15);
 */
+
+
+function increaseGameSpeed() {
+  gameSpeedMultiplier += 0.01;
+
+  // Increase spawn rate of imps
+  gameImpSpawnTime -= 180 * gameSpeedMultiplier;
+  if(gameImpSpawnTime < minimumImpSpawnTime) {
+    gameImpSpawnTime = minimumImpSpawnTime;
+  }
+
+  // Scale up speeds
+  impBaseThrust *= (gameSpeedMultiplier * 1.18);
+  impMaxVelocity *= gameImpSpawnTime;
+  if(impBaseThrust > maxThrustScaled) {
+    impBaseThrust = maxThrustScaled;
+  }
+  if(impMaxVelocity > maxVelocityScaled) {
+    impMaxVelocity = maxVelocityScaled;
+  }
+
+
+  // Schedule the increase constantly
+  game.time.events.add(gameSpeedIncreaseTimer, function(){
+    increaseGameSpeed();
+  }, this);
+}

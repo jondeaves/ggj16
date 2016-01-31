@@ -5,6 +5,12 @@ var screenWidthX = 800;
 var screenWidthY = 480;
 var gameStartingImpCount = 2;
 var gameImpSpawnTime = 2000;
+var gameSpeedMultiplier = 1;
+var gameSpeedIncreaseTimer = 2000;
+
+var minimumImpSpawnTime = 800;
+var maxThrustScaled = 500;
+var maxVelocityScaled = 15;
 
 // Imps
 var rotationChangePerSecond = 0.0025;
