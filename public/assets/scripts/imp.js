@@ -39,7 +39,7 @@ var Imp = function (game, objectGroup, collisionGroup, index, coneGroup) {
     this.animations.add('walk', [0, 1, 2]);
     this.animations.add('death', [deathFrame]);
     this.animations.play('walk', 10, true);
-    // console.log(deathFrame);
+
 
     game.time.events.add(1000, function(){
         updateImpHealth(this);
@@ -61,7 +61,6 @@ Imp.prototype.update = function() {
     (this.y > game.height + worldBoundsOffset); // off to left
 
   if(isOutside) {
-    // console.log('is outside');
     turnToTargetLocal = null;
     var point1 = new Phaser.Point(this.x, this.y);
     var point2 = new Phaser.Point(game.width / 2, game.height / 2);
