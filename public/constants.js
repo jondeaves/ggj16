@@ -12,7 +12,7 @@ var minimumImpSpawnTime = 800;
 var maxThrustScaled = 500;
 var maxVelocityScaled = 15;
 var gameLoseCount = 20;  // number of imp fatalities until game fail
-var gameWinCount = 20;  // number of imp fatalities until game fail
+var gameWinCount = 40;  // number of imp fatalities until game fail
 
 // Imps
 var rotationChangePerSecond = 0.0025;
