@@ -59,6 +59,8 @@ window.onload = function() {
   game.state.add("InstructionScreen", instructionScreen);
   game.state.add("CreditScreen", creditScreen);
   game.state.add("PlayGame", playGame);
+  game.state.add("WinGame", winGame);
+  game.state.add("LoseGame", loseGame);
   game.state.start("StartGame");
 };
 
@@ -67,6 +69,8 @@ var startGame = function(){};
 var instructionScreen = function() {};
 var creditScreen = function() {};
 var playGame = function(){};
+var winGame = function(){};
+var loseGame = function(){};
 
 startGame.prototype = {
   preload: function() {
@@ -155,6 +159,7 @@ playGame.prototype = {
     game.load.image("coneHor", "assets/sprites/spriteConeHorizontal.png");
     game.load.image("coneVert", "assets/sprites/spriteConeVertical.png");
     game.load.image("pentagram", "assets/sprites/pentagram.png");
+    game.load.image("impress", "assets/sprites/impress.png");
 
     // spritesheets
     game.load.spritesheet('imp1', 'assets/sprites/sprite_imp_death_1.png', 676, 764, 4);
@@ -229,8 +234,8 @@ playGame.prototype = {
 
 
     setupDropoff();
-
     setupLevel();
+    increaseGameSpeed();
   },
   update: function(){
     updateTimer();
@@ -293,6 +298,31 @@ playGame.prototype = {
   }
 };
 
+
+winGame.prototype = {
+  preload: function() {
+    game.load.image("winScreen", "assets/bg/WinScreen.png");
+  },
+  create: function(){
+    var startScreen = game.add.image(0, 0, "winScreen");
+    startScreen.width = screenWidthX;
+    startScreen.height = screenWidthY;
+  },
+  update: function(){ }
+};
+
+
+loseGame.prototype = {
+  preload: function() {
+    game.load.image("loseScreen", "assets/bg/LoseScreen.png");
+  },
+  create: function(){
+    var startScreen = game.add.image(0, 0, "loseScreen");
+    startScreen.width = screenWidthX;
+    startScreen.height = screenWidthY;
+  },
+  update: function(){ }
+};
 
 function updateTimer() {
   // Time Tracking
@@ -401,6 +431,9 @@ function setupDropoff() {
   var coneLine2 = game.add.sprite(200, 320, 'coneHor');
   var coneLine3 = game.add.sprite(20, 230, 'coneVert');
   pentagram = game.add.sprite(50, 165, 'pentagram');
+  impress = game.add.sprite(60, 10, 'impress');
+  impress.scale.setTo(0.7, 0.7);
+  impress.visible = false;
 
 
 
@@ -532,8 +565,12 @@ function triggerSacrifice(imp) {
   }
    Math.floor((Math.random() * 2));
   bgImage.alpha -= 1/gameWinCount;
-  if (bgImage.alpha <1){
+  if (bgImage.alpha <0.1){
     // win condition triggered;
+    impress.visible = true;
+    game.time.events.add(2000, function(){
+      game.state.start("WinGame");
+    }, this);
   }
 
   imp.destroy();
@@ -541,8 +578,10 @@ function triggerSacrifice(imp) {
 
 function impDeath(){
   impDeaths ++;
+
   if (impDeaths >= gameLoseCount){
     // game lose condition
+    game.state.start("LoseGame");
   }
 }
 
@@ -562,3 +601,30 @@ spider.animations.add('walk');
 spider.animations.play('walk', 4, true);
 spider.scale.setTo(0.15, 0.15);
 */
+
+
+function increaseGameSpeed() {
+  gameSpeedMultiplier += 0.01;
+
+  // Increase spawn rate of imps
+  gameImpSpawnTime -= 180 * gameSpeedMultiplier;
+  if(gameImpSpawnTime < minimumImpSpawnTime) {
+    gameImpSpawnTime = minimumImpSpawnTime;
+  }
+
+  // Scale up speeds
+  impBaseThrust *= (gameSpeedMultiplier * 1.18);
+  impMaxVelocity *= gameImpSpawnTime;
+  if(impBaseThrust > maxThrustScaled) {
+    impBaseThrust = maxThrustScaled;
+  }
+  if(impMaxVelocity > maxVelocityScaled) {
+    impMaxVelocity = maxVelocityScaled;
+  }
+
+
+  // Schedule the increase constantly
+  game.time.events.add(gameSpeedIncreaseTimer, function(){
+    increaseGameSpeed();
+  }, this);
+}

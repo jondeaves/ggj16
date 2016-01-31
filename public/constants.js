@@ -5,8 +5,14 @@ var screenWidthX = 800;
 var screenWidthY = 480;
 var gameStartingImpCount = 2;
 var gameImpSpawnTime = 2000;
-var gameLoseCount = 40;  // number of imp fatalities until game fail
-var gameWinCount = 40;  // number of imp fatalities until game fail
+var gameSpeedMultiplier = 1;
+var gameSpeedIncreaseTimer = 2000;
+
+var minimumImpSpawnTime = 800;
+var maxThrustScaled = 500;
+var maxVelocityScaled = 15;
+var gameLoseCount = 20;  // number of imp fatalities until game fail
+var gameWinCount = 20;  // number of imp fatalities until game fail
 
 // Imps
 var rotationChangePerSecond = 0.0025;
@@ -24,3 +30,9 @@ var impDeathSequenceLength = 2400;      // Milliseconds death lasts
 var impDeathSpinSpeed = 5;
 var impDeathSpinSpeedIncrement = 0.04;   // Speed increase by this much each time
 var impDeathScaleSpeed = 0.00028;
+
+
+
+
+
+ var gameWinOpacityIncrease = 0.025;
