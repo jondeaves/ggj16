@@ -91,6 +91,7 @@ Imp.prototype.update = function() {
 
   // Health check
   if(this.body.health <= 0 && !this.isDying) {
+    impDeath();
     this.isDying = true;
     impaled.play();
     this.animations.play('death', 10, true);

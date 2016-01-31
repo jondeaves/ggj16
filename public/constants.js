@@ -5,6 +5,7 @@ var screenWidthX = 800;
 var screenWidthY = 480;
 var gameStartingImpCount = 2;
 var gameImpSpawnTime = 2000;
+var gameLoseCount = 20;  // number of imp fatalities until game fail
 
 // Imps
 var rotationChangePerSecond = 0.0025;

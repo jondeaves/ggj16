@@ -5,6 +5,8 @@ var game;
 // Track some timing stuff
 var gameTimer;
 
+var impDeaths = 0;
+
 var startTime = 0;
 var elapsedTime = 0;
 var previousElapsedTime = 0;
@@ -446,6 +448,13 @@ function triggerSacrifice(imp) {
   }
 
   imp.destroy();
+}
+
+function impDeath(){
+  impDeaths ++;
+  if (impDeaths >= gameLoseCount){
+    // game lose condition
+  }
 }
 
 /*
