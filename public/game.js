@@ -140,7 +140,7 @@ playGame.prototype = {
     game.physics.p2.enable(rectUpper);
     game.physics.p2.enable(rectLowerr);
     game.physics.p2.enable(rectLeft);
-    debugger;
+
     // rectUpper.body.kinematic = true;
     // rectLowerr.body.kinematic = true;
     // rectLeft.body.kinematic = true;
@@ -175,10 +175,8 @@ playGame.prototype = {
     impGroup = game.add.physicsGroup(Phaser.Physics.P2JS);
     impCollisionGroup = game.physics.p2.createCollisionGroup();
 
-    for (var i = 0; i < 10; i++){
-      var imp = new Imp(game, impGroup, impCollisionGroup, i);
-      game.add.existing(imp);
-      impGroup.add(imp);
+    for (var i = 0; i < gameStartingImpCount; ++i){
+      spawnImp(i === (gameStartingImpCount - 1));
     }
 
     setupLevel();
@@ -340,7 +338,7 @@ function playBump(point){
     bump2.play();
   } else if (result ===3){
     bump3.play();
-  } else if (result = 4){
+  } else if (result === 4){
     bump4.play();
   }
 }
@@ -353,6 +351,36 @@ function playOuch(point, gender){
     nuuuu.play();
   } else if (result ===3){
     whoop.play();
+  }
+}
+
+
+function spawnImp(schedule) {
+
+  // Do we want to run a random check
+  //  if schedule is false then it is initial spawns
+  var canSpawn = false;
+  if(!schedule) {
+    canSpawn = true;
+  } else {
+    var spawnRndChecker = game.rnd.integerInRange(1, 6);
+    if(spawnRndChecker < 3) {
+      canSpawn = true;
+    }
+  }
+
+
+  if(canSpawn) {
+    var imp = new Imp(game, impGroup, impCollisionGroup, impGroup.length);
+    game.add.existing(imp);
+    impGroup.add(imp);
+  }
+
+
+  if(schedule) {
+    game.time.events.add(gameImpSpawnTime, function(){
+      spawnImp(true);
+    }, this);
   }
 }
 
@@ -372,41 +400,3 @@ spider.animations.add('walk');
 spider.animations.play('walk', 4, true);
 spider.scale.setTo(0.15, 0.15);
 */
-
-
-
-
-/*
- * Easing Functions - inspired from http://gizma.com/easing/
- * only considering the t value for the range [0, 1] => [0, 1]
- */
-/* jshint ignore:start */
-EasingFunctions = {
-  // no easing, no acceleration
-  linear: function (t) { return t },
-  // accelerating from zero velocity
-  easeInQuad: function (t) { return t*t },
-  // decelerating to zero velocity
-  easeOutQuad: function (t) { return t*(2-t) },
-  // acceleration until halfway, then deceleration
-  easeInOutQuad: function (t) { return t<.5 ? 2*t*t : -1+(4-2*t)*t },
-  // accelerating from zero velocity
-  easeInCubic: function (t) { return t*t*t },
-  // decelerating to zero velocity
-  easeOutCubic: function (t) { return (--t)*t*t+1 },
-  // acceleration until halfway, then deceleration
-  easeInOutCubic: function (t) { return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1 },
-  // accelerating from zero velocity
-  easeInQuart: function (t) { return t*t*t*t },
-  // decelerating to zero velocity
-  easeOutQuart: function (t) { return 1-(--t)*t*t*t },
-  // acceleration until halfway, then deceleration
-  easeInOutQuart: function (t) { return t<.5 ? 8*t*t*t*t : 1-8*(--t)*t*t*t },
-  // accelerating from zero velocity
-  easeInQuint: function (t) { return t*t*t*t*t },
-  // decelerating to zero velocity
-  easeOutQuint: function (t) { return 1+(--t)*t*t*t*t },
-  // acceleration until halfway, then deceleration
-  easeInOutQuint: function (t) { return t<.5 ? 16*t*t*t*t*t : 1+16*(--t)*t*t*t*t }
-}
-/* jshint ignore:end */

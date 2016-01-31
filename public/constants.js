@@ -3,6 +3,8 @@ var physicsBaseRestitution = 3;           // Bounce strength
 var worldBoundsOffset = 50;            // An offset to stop imp return to centre until totally off screen
 var screenWidthX = 800;
 var screenWidthY = 480;
+var gameStartingImpCount = 2;
+var gameImpSpawnTime = 2000;
 
 // Imps
 var rotationChangePerSecond = 0.0025;
