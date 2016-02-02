@@ -161,7 +161,7 @@ playGame.prototype = {
 
 
     // images
-    game.load.image("background", "assets/bg/screenMockUp.png");
+    game.load.image("background", "assets/bg/background.png");
     game.load.image("coneHor", "assets/sprites/spriteConeHorizontal.png");
     game.load.image("coneVert", "assets/sprites/spriteConeVertical.png");
     game.load.image("pentagram", "assets/sprites/pentagram.png");
