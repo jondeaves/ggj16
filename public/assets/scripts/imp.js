@@ -24,7 +24,7 @@ var Imp = function (game, objectGroup, collisionGroup, index, coneGroup) {
     // this.body.rotation = (180/Math.PI) * impRotation;
     this.id='imp_'+index;
     // setting anchor forwards creates a swinging effect on rotation
-    this.anchor.y = 0.33
+    this.anchor.y = 0.33;
 
 
     // Set-up Collisions
